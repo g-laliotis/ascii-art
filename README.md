@@ -6,7 +6,7 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 
 ## ✨ Features
 
-- 🎨 Three beautiful banner styles: `standard`, `shadow`, `thinkertoy`
+- 🎨 ASCII art using `standard` banner style (with `shadow` and `thinkertoy` support planned)
 - 📝 Support for letters, numbers, spaces, and special characters
 - 🔄 Multi-line output with `\n` support
 - ⚡ Fast and lightweight - uses only Go standard library
@@ -88,7 +88,8 @@ ascii-art/
 ├── cmd/ascii-art/main.go      # Entry point
 ├── internal/ascii/            # Core logic and tests
 ├── internal/version/          # Version info
-├── assets/                    # Banner template files
+├── assets/
+│   └── standard.txt           # Standard banner template
 └── go.mod                     # Go module
 ```
 
