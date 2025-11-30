@@ -27,13 +27,13 @@ cd ascii-art
 go mod init ascii-art
 
 # Run directly
-go run . "Hello World"
+go run ./cmd/ascii-art "Hello World"
 ```
 
 ## 📝 Example Output
 
 ```bash
-$ go run . "Hello"
+$ go run ./cmd/ascii-art "Hello"
  _    _          _   _          
 | |  | |        | | | |         
 | |__| |   ___  | | | |   ___   
@@ -53,7 +53,7 @@ $ go run . "Hello"
 
 ```bash
 # Build executable
-go build -o ascii-art .
+go build -o ascii-art ./cmd/ascii-art
 
 # Run the binary
 ./ascii-art "Your Text Here"
@@ -73,24 +73,23 @@ go test -cover ./...
 
 ```bash
 # Basic text
-go run . "Hello"
+go run ./cmd/ascii-art "Hello"
 
 # Multi-line text
-go run . "Hello\nWorld"
+go run ./cmd/ascii-art "Hello\nWorld"
 
 # Special characters and numbers
-go run . "Hello There! 123"
+go run ./cmd/ascii-art "Hello There! 123"
 
 # Empty string (prints nothing)
-go run . ""
+go run ./cmd/ascii-art ""
 ```
 
 ## 📁 Project Structure
 
 ```
 ascii-art/
-├── main.go                    # Entry point
-├── cmd/ascii-art/main.go      # Alternative entry point
+├── cmd/ascii-art/main.go      # Entry point
 ├── internal/ascii/            # Core logic and tests
 ├── internal/version/          # Version info
 ├── assets/
