@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII-Art - Transform Text into Beautiful ASCII Art</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        main {
+            margin-top: 80px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .demo {
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .demo h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+        
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .demo-input {
+            text-align: center;
+        }
+        
+        .demo-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .installation {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .code-block {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">ASCII-Art</div>
+            <ul class="nav-links">
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="https://github.com/g-laliotis/ascii-art">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>ASCII-Art</h1>
+            <p>Transform your text into beautiful ASCII art with ease</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/g-laliotis/ascii-art" class="btn btn-primary">View on GitHub</a>
+                <a href="#demo" class="btn btn-secondary">Try Demo</a>
+            </div>
+        </section>
+
+        <section id="demo" class="demo">
+            <h2>Live Demo</h2>
+            <div class="demo-container">
+                <div class="demo-input">
+                    <input type="text" id="textInput" placeholder="Enter text here..." value="Hello">
+                    <button onclick="generateArt()" class="btn btn-primary">Generate ASCII Art</button>
+                </div>
+                <div class="demo-output" id="output">
+ _    _          _   _          
+| |  | |        | | | |         
+| |__| |   ___  | | | |   ___   
+|  __  |  / _ \ | | | |  / _ \  
+| |  | | |  __/ | | | | | (_) | 
+|_|  |_|  \___| |_| |_|  \___/  
+                                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <h3>Beautiful ASCII Art</h3>
+                <p>Convert any text into stunning ASCII art using the standard banner style</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast & Lightweight</h3>
+                <p>Built with Go, uses only standard library for maximum performance</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔧</div>
+                <h3>Easy to Use</h3>
+                <p>Simple command-line interface with comprehensive documentation</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📝</div>
+                <h3>Multi-line Support</h3>
+                <p>Handle newlines and create complex multi-line ASCII art layouts</p>
+            </div>
+        </section>
+
+        <section id="installation" class="installation">
+            <h2>Installation & Usage</h2>
+            
+            <h3>Quick Start</h3>
+            <div class="code-block">git clone https://github.com/g-laliotis/ascii-art.git
+cd ascii-art
+go run ./cmd/ascii-art "Hello World"</div>
+
+            <h3>Build from Source</h3>
+            <div class="code-block">make build
+./ascii-art "Your Text Here"</div>
+
+            <h3>Using Makefile</h3>
+            <div class="code-block">make test          # Run all tests
+make build         # Build binary
+make install       # Install to GOPATH/bin
+make run           # Run with example</div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ASCII-Art. Created by Giorgos Laliotis & Stavros Gkraikas. MIT License.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple ASCII art generator for demo (limited characters)
+        const asciiChars = {
+            'H': [
+                ' _    _ ',
+                '| |  | |',
+                '| |__| |',
+                '|  __  |',
+                '| |  | |',
+                '|_|  |_|',
+                '        '
+            ],
+            'e': [
+                '        ',
+                '        ',
+                '  ___   ',
+                ' / _ \\  ',
+                '|  __/  ',
+                ' \\___|  ',
+                '        '
+            ],
+            'l': [
+                ' _ ',
+                '| |',
+                '| |',
+                '| |',
+                '| |',
+                '|_|',
+                '   '
+            ],
+            'o': [
+                '        ',
+                '        ',
+                '  ___   ',
+                ' / _ \\  ',
+                '| (_) | ',
+                ' \\___/  ',
+                '        '
+            ],
+            ' ': [
+                '   ',
+                '   ',
+                '   ',
+                '   ',
+                '   ',
+                '   ',
+                '   '
+            ]
+        };
+
+        function generateArt() {
+            const input = document.getElementById('textInput').value.toLowerCase();
+            const output = document.getElementById('output');
+            
+            if (!input) {
+                output.textContent = 'Enter some text to generate ASCII art!';
+                return;
+            }
+
+            const lines = ['', '', '', '', '', '', ''];
+            
+            for (let char of input) {
+                if (asciiChars[char]) {
+                    for (let i = 0; i < 7; i++) {
+                        lines[i] += asciiChars[char][i];
+                    }
+                } else {
+                    // Fallback for unsupported characters
+                    for (let i = 0; i < 7; i++) {
+                        lines[i] += '??? ';
+                    }
+                }
+            }
+            
+            output.textContent = lines.join('\n');
+        }
+
+        // Generate initial demo
+        generateArt();
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
