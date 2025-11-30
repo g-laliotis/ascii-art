@@ -5,7 +5,7 @@ Thank you for your interest in contributing to ASCII-Art! This document provides
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/ascii-art.git`
+2. Clone your fork: `git clone https://github.com/g-laliotis/ascii-art.git`
 3. Create a feature branch: `git checkout -b feature-name`
 
 ## Development Setup
