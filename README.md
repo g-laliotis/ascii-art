@@ -83,7 +83,22 @@ go run ./cmd/ascii-art "Hello There! 123"
 
 # Empty string (prints nothing)
 go run ./cmd/ascii-art ""
+
+# Long text (save to file for better viewing)
+go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt
 ```
+
+### 📏 Viewing Long Output
+
+For very long strings (like the full alphabet), the output may be too wide for your terminal:
+
+**Problem**: Lines wrap and appear distorted in terminal
+
+**Solutions**:
+1. **Save to file**: `go run ./cmd/ascii-art "long text" > output.txt`
+2. **Use wider terminal**: Increase terminal width
+3. **Text editor**: Open output file with word wrap disabled
+4. **Horizontal scroll**: Use `less -S output.txt` for scrollable viewing
 
 ## 📁 Project Structure
 
@@ -105,6 +120,7 @@ ascii-art/
 3. **Output**: Combines characters horizontally to create ASCII art
 4. **Format**: Each character is exactly 8 lines tall
 5. **Support**: ASCII characters 32-126 (printable characters)
+6. **Width**: Characters have variable widths (W is wider than I, etc.)
 
 ## 🤝 Contributing
 
