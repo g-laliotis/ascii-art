@@ -5,6 +5,7 @@
 [![CI](https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml/badge.svg)](https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Report Card](https://goreportcard.com/badge/github.com/g-laliotis/ascii-art)](https://goreportcard.com/report/github.com/g-laliotis/ascii-art)
+[![Makefile](https://img.shields.io/badge/build-Makefile-blue.svg)](Makefile)
 
 ASCII-Art is a command-line tool that converts regular text into stylized ASCII art using predefined banner templates. Perfect for creating eye-catching headers, banners, or just having fun with text!
 
