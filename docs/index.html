@@ -193,6 +193,7 @@ go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
                 ' / _ \\  ',
                 '|  __/  ',
                 ' \\___|  ',
+                '        ',
                 '        '
             ],
             'l': [
@@ -202,6 +203,7 @@ go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
                 '| |',
                 '| |',
                 '|_|',
+                '   ',
                 '   '
             ],
             'o': [
@@ -211,9 +213,11 @@ go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
                 ' / _ \\  ',
                 '| (_) | ',
                 ' \\___/  ',
+                '        ',
                 '        '
             ],
             ' ': [
+                '   ',
                 '   ',
                 '   ',
                 '   ',
@@ -233,16 +237,16 @@ go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
                 return;
             }
 
-            const lines = ['', '', '', '', '', '', ''];
+            const lines = ['', '', '', '', '', '', '', ''];
             
             for (let char of input) {
                 if (asciiChars[char]) {
-                    for (let i = 0; i < 7; i++) {
+                    for (let i = 0; i < 8; i++) {
                         lines[i] += asciiChars[char][i];
                     }
                 } else {
-                    for (let i = 0; i < 7; i++) {
-                        lines[i] += '??? ';
+                    for (let i = 0; i < 8; i++) {
+                        lines[i] += '? ';
                     }
                 }
             }
@@ -250,7 +254,11 @@ go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
             output.textContent = lines.join('\n');
         }
 
-        generateArt();
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('textInput');
+            input.addEventListener('input', generateArt);
+            generateArt();
+        });
     </script>
 </body>
 </html>
