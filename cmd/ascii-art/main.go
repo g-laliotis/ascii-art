@@ -26,8 +26,7 @@ func main() {
 
 	// Generate and print ASCII art
 	result := ascii.GenerateArt(text, charMap)
-	fmt.Print(result)
 	if result != "" {
-		fmt.Println()
+		fmt.Print(result + "\n")
 	}
 }

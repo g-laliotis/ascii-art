@@ -16,7 +16,7 @@ func GenerateArt(text string, charMap map[rune][]string) string {
 
 	for _, line := range lines {
 		if line == "" {
-			// Add empty line
+			// Add empty line without $
 			result = append(result, "")
 			continue
 		}
@@ -47,6 +47,13 @@ func generateLineArt(line string, charMap map[rune][]string) []string {
 					artLines[i] += charLines[i]
 				}
 			}
+		}
+	}
+
+	// Add $ at the end of each non-empty line
+	for i := range artLines {
+		if artLines[i] != "" {
+			artLines[i] += "$"
 		}
 	}
 
