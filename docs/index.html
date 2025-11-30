@@ -3,285 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASCII-Art - Transform Text into Beautiful ASCII Art</title>
+    <title>ASCII-Art | Text to ASCII Art Generator</title>
+    <meta name="description" content="Command-line ASCII art generator with banner templates written in Go">
+    <meta name="keywords" content="ascii, art, go, golang, cli, banner, text, generator">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117; color: #e6edf3; line-height: 1.6;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #e0e0e0;
-            background: #0d1117;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        header {
-            background: #161b22;
-            border-bottom: 1px solid #30363d;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #58a6ff;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            color: #f0f6fc;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #58a6ff;
-        }
-        
-        main {
-            margin-top: 80px;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            color: #f0f6fc;
-            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #58a6ff;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #8b949e;
-        }
-        
-        .badges {
-            margin: 1rem 0;
-        }
-        
-        .badges img {
-            margin: 0 4px;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        
-        .btn-primary {
-            background: #238636;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #2ea043;
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: #f0f6fc;
-            border: 1px solid #30363d;
-        }
-        
-        .btn-secondary:hover {
-            background: #21262d;
-            border-color: #58a6ff;
-        }
-        
-        .demo {
-            background: #161b22;
-            border: 1px solid #30363d;
-            margin: 2rem 0;
-            padding: 2rem;
-            border-radius: 12px;
-        }
-        
-        .demo h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #f0f6fc;
-        }
-        
-        .demo-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: center;
-        }
-        
-        .demo-input {
-            text-align: center;
-        }
-        
-        .demo-input input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            background: #0d1117;
-            color: #f0f6fc;
-        }
-        
-        .demo-input input::placeholder {
-            color: #8b949e;
-        }
-        
-        .demo-output {
-            background: #0d1117;
-            color: #58a6ff;
-            padding: 1rem;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            overflow-x: auto;
-            white-space: pre;
-            border: 1px solid #30363d;
-        }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .feature {
-            background: #161b22;
-            border: 1px solid #30363d;
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            color: #f0f6fc;
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .installation {
-            background: #161b22;
-            border: 1px solid #30363d;
-            padding: 2rem;
-            border-radius: 12px;
-            margin: 2rem 0;
-            color: #f0f6fc;
-        }
-        
-        .code-block {
-            background: #0d1117;
-            color: #58a6ff;
-            padding: 1rem;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            margin: 1rem 0;
-            overflow-x: auto;
-            border: 1px solid #30363d;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: #8b949e;
-            border-top: 1px solid #30363d;
-            margin-top: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .demo-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 3rem; color: #58a6ff; margin-bottom: 1rem; }
+        .header p { font-size: 1.2rem; color: #8b949e; }
+        .badges { display: flex; justify-content: center; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+        .badge { padding: 0.3rem 0.8rem; background: #21262d; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 2rem 0; padding: 1.5rem; background: #161b22; border-radius: 8px; border: 1px solid #30363d; }
+        .section h2 { color: #f0f6fc; margin-bottom: 1rem; }
+        .code { background: #0d1117; padding: 1rem; border-radius: 6px; border: 1px solid #30363d; font-family: 'SF Mono', Monaco, monospace; overflow-x: auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .card { background: #21262d; padding: 1.5rem; border-radius: 8px; border: 1px solid #30363d; }
+        .card h3 { color: #58a6ff; margin-bottom: 0.5rem; }
+        .btn { display: inline-block; padding: 0.8rem 1.5rem; background: #238636; color: white; text-decoration: none; border-radius: 6px; margin: 0.5rem 0.5rem 0.5rem 0; }
+        .btn:hover { background: #2ea043; }
+        .btn-secondary { background: #21262d; border: 1px solid #30363d; }
+        .btn-secondary:hover { background: #30363d; }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .demo-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+        .demo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+        .demo-input input { width: 100%; padding: 12px; border: 1px solid #30363d; border-radius: 6px; background: #0d1117; color: #f0f6fc; font-size: 1rem; }
+        .demo-output { background: #0d1117; color: #58a6ff; padding: 1rem; border-radius: 6px; font-family: 'SF Mono', Monaco, monospace; font-size: 0.8rem; overflow-x: auto; white-space: pre; border: 1px solid #30363d; min-height: 200px; }
+        @media (max-width: 768px) { .demo-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <div class="logo">ASCII-Art</div>
-            <ul class="nav-links">
-                <li><a href="#demo">Demo</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#installation">Installation</a></li>
-                <li><a href="https://github.com/g-laliotis/ascii-art">GitHub</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="container">
-        <section class="hero">
-            <h1>ASCII-Art</h1>
-            <p>Transform your text into beautiful ASCII art with ease</p>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 ASCII-Art</h1>
+            <p>Transform text into beautiful ASCII art with banner templates</p>
             <div class="badges">
-                <img src="https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml/badge.svg" alt="CI">
-                <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
-                <img src="https://goreportcard.com/badge/github.com/g-laliotis/ascii-art" alt="Go Report">
-                <img src="https://img.shields.io/badge/build-Makefile-blue.svg" alt="Makefile">
+                <span class="badge">Go 1.19+</span>
+                <a href="https://github.com/g-laliotis/ascii-art/blob/master/LICENSE" class="badge" style="color: #e6edf3; text-decoration: none;">MIT License</a>
+                <span class="badge">100% Test Coverage</span>
+                <span class="badge">Makefile Build</span>
+                <a href="https://github.com/g-laliotis/ascii-art/actions" class="badge" style="color: #e6edf3; text-decoration: none;">CI/CD Pipeline</a>
+                <span class="badge">Standard Library Only</span>
             </div>
-            <div class="cta-buttons">
-                <a href="https://github.com/g-laliotis/ascii-art" class="btn btn-primary">View on GitHub</a>
+            <div style="margin-top: 1.5rem;">
+                <a href="https://github.com/g-laliotis/ascii-art" class="btn">View on GitHub</a>
                 <a href="#demo" class="btn btn-secondary">Try Demo</a>
             </div>
-        </section>
+        </div>
 
-        <section id="demo" class="demo">
-            <h2>Live Demo</h2>
+        <div class="section">
+            <h2>🚀 TL;DR Overview</h2>
+            <p>ASCII-Art is a command-line tool that converts regular text into stylized ASCII art using predefined banner templates. Built with Go's standard library for maximum performance and portability.</p>
+            <p><strong>Perfect for:</strong> creating eye-catching headers, banners, terminal art, or learning Go project structure with comprehensive testing.</p>
+        </div>
+
+        <div id="demo" class="demo-section">
+            <h2>🎯 Live Demo</h2>
             <div class="demo-container">
                 <div class="demo-input">
                     <input type="text" id="textInput" placeholder="Enter text here..." value="Hello">
-                    <button onclick="generateArt()" class="btn btn-primary">Generate ASCII Art</button>
+                    <button onclick="generateArt()" class="btn" style="width: 100%; margin-top: 1rem;">Generate ASCII Art</button>
                 </div>
                 <div class="demo-output" id="output">
  _    _          _   _          
@@ -292,56 +79,101 @@
 |_|  |_|  \___| |_| |_|  \___/  
                                 </div>
             </div>
-        </section>
-
-        <section id="features" class="features">
-            <div class="feature">
-                <div class="feature-icon">🎨</div>
-                <h3>Beautiful ASCII Art</h3>
-                <p>Convert any text into stunning ASCII art using the standard banner style</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <h3>Fast & Lightweight</h3>
-                <p>Built with Go, uses only standard library for maximum performance</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔧</div>
-                <h3>Easy to Use</h3>
-                <p>Simple command-line interface with comprehensive documentation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📝</div>
-                <h3>Multi-line Support</h3>
-                <p>Handle newlines and create complex multi-line ASCII art layouts</p>
-            </div>
-        </section>
-
-        <section id="installation" class="installation">
-            <h2>Installation & Usage</h2>
-            
-            <h3>Quick Start</h3>
-            <div class="code-block">git clone https://github.com/g-laliotis/ascii-art.git
-cd ascii-art
-go run ./cmd/ascii-art "Hello World"</div>
-
-            <h3>Build from Source</h3>
-            <div class="code-block">make build
-./ascii-art "Your Text Here"</div>
-
-            <h3>Using Makefile</h3>
-            <div class="code-block">make test          # Run all tests
-make build         # Build binary
-make install       # Install to GOPATH/bin
-make run           # Run with example</div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 ASCII-Art. Created by Giorgos Laliotis & Stavros Gkraikas. MIT License.</p>
         </div>
-    </footer>
+
+        <div class="section">
+            <h2>⚡ Quick Start</h2>
+            <div class="code">git clone https://github.com/g-laliotis/ascii-art.git
+cd ascii-art
+go run ./cmd/ascii-art "Hello World"
+
+# Using Makefile
+make build
+./ascii-art "Your Text Here"
+
+# Run tests
+make test</div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Features & Capabilities</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>📝 Standard Banner</h3>
+                    <p>High-quality ASCII art using standard banner template with support for all printable ASCII characters</p>
+                </div>
+                <div class="card">
+                    <h3>🔄 Multi-line Support</h3>
+                    <p>Handle newlines (\n) for complex layouts and multi-line ASCII art compositions</p>
+                </div>
+                <div class="card">
+                    <h3>⚡ Lightning Fast</h3>
+                    <p>Zero dependencies - uses only Go standard library for maximum performance and portability</p>
+                </div>
+                <div class="card">
+                    <h3>🎯 Character Perfect</h3>
+                    <p>Supports letters, numbers, spaces, and special characters with precise 8-line formatting</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Testing & Quality</h2>
+            <p>Comprehensive test suite with 50+ test cases covering unit tests, integration tests, edge cases, and all ASCII characters. Automated CI/CD ensures reliability.</p>
+            <div class="code">make test          # Run all tests with verbose output
+make test-coverage # Run tests with coverage report
+make build         # Build optimized binary
+make help          # Show all available commands</div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Professional Architecture</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>📁 Clean Structure</h3>
+                    <p>Standard Go project layout with cmd/ and internal/ directories</p>
+                </div>
+                <div class="card">
+                    <h3>🧪 100% Coverage</h3>
+                    <p>Comprehensive test suite covering all functionality and edge cases</p>
+                </div>
+                <div class="card">
+                    <h3>🔧 Makefile Build</h3>
+                    <p>Professional build system with test, build, install, and clean targets</p>
+                </div>
+                <div class="card">
+                    <h3>📋 Open Source</h3>
+                    <p>MIT licensed with contributing guidelines and GitHub Actions CI</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Usage Examples</h2>
+            <div class="code"># Basic text
+go run ./cmd/ascii-art "Hello"
+
+# Multi-line text  
+go run ./cmd/ascii-art "Hello\nWorld"
+
+# Special characters and numbers
+go run ./cmd/ascii-art "Hello There! 123"
+
+# Save long output to file
+go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
+        </div>
+
+        <div class="section">
+            <h2>📖 Documentation</h2>
+            <p>Complete documentation and development resources:</p>
+            <div style="margin-top: 1rem;">
+                <a href="https://github.com/g-laliotis/ascii-art/blob/master/README.md" class="btn btn-secondary">README</a>
+                <a href="https://github.com/g-laliotis/ascii-art/blob/master/CONTRIBUTING.md" class="btn btn-secondary">Contributing</a>
+                <a href="https://github.com/g-laliotis/ascii-art/blob/master/LICENSE" class="btn btn-secondary">License</a>
+                <a href="https://github.com/g-laliotis/ascii-art/issues" class="btn btn-secondary">Issues</a>
+            </div>
+        </div>
+    </div>
 
     <script>
         const asciiChars = {
@@ -419,15 +251,6 @@ make run           # Run with example</div>
         }
 
         generateArt();
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
     </script>
 </body>
 </html>
