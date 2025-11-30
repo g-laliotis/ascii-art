@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #e0e0e0;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            background: #0d1117;
             min-height: 100vh;
         }
         
@@ -26,14 +26,13 @@
         }
         
         header {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         nav {
@@ -45,7 +44,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
-            color: white;
+            color: #58a6ff;
         }
         
         .nav-links {
@@ -55,13 +54,13 @@
         }
         
         .nav-links a {
-            color: white;
+            color: #f0f6fc;
             text-decoration: none;
-            transition: opacity 0.3s;
+            transition: color 0.3s;
         }
         
         .nav-links a:hover {
-            opacity: 0.8;
+            color: #58a6ff;
         }
         
         main {
@@ -71,19 +70,28 @@
         .hero {
             text-align: center;
             padding: 4rem 0;
-            color: white;
+            color: #f0f6fc;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
         }
         
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #58a6ff;
         }
         
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
-            opacity: 0.9;
+            color: #8b949e;
+        }
+        
+        .badges {
+            margin: 1rem 0;
+        }
+        
+        .badges img {
+            margin: 0 4px;
         }
         
         .cta-buttons {
@@ -99,7 +107,7 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             display: inline-block;
         }
         
@@ -113,35 +121,28 @@
         }
         
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e0e0e0;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #f0f6fc;
+            border: 1px solid #30363d;
         }
         
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: #21262d;
+            border-color: #58a6ff;
         }
         
         .demo {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #161b22;
+            border: 1px solid #30363d;
             margin: 2rem 0;
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
         
         .demo h2 {
             text-align: center;
             margin-bottom: 2rem;
-            color: #e0e0e0;
+            color: #f0f6fc;
         }
         
         .demo-container {
@@ -158,16 +159,16 @@
         .demo-input input {
             width: 100%;
             padding: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid #30363d;
             border-radius: 6px;
             font-size: 1rem;
             margin-bottom: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: #e0e0e0;
+            background: #0d1117;
+            color: #f0f6fc;
         }
         
         .demo-input input::placeholder {
-            color: rgba(224, 224, 224, 0.6);
+            color: #8b949e;
         }
         
         .demo-output {
@@ -179,7 +180,7 @@
             font-size: 0.8rem;
             overflow-x: auto;
             white-space: pre;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #30363d;
         }
         
         .features {
@@ -190,13 +191,12 @@
         }
         
         .feature {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #161b22;
+            border: 1px solid #30363d;
             padding: 2rem;
             border-radius: 12px;
             text-align: center;
-            color: #e0e0e0;
+            color: #f0f6fc;
         }
         
         .feature-icon {
@@ -205,14 +205,12 @@
         }
         
         .installation {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #161b22;
+            border: 1px solid #30363d;
             padding: 2rem;
             border-radius: 12px;
             margin: 2rem 0;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            color: #e0e0e0;
+            color: #f0f6fc;
         }
         
         .code-block {
@@ -223,14 +221,15 @@
             font-family: 'Courier New', monospace;
             margin: 1rem 0;
             overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #30363d;
         }
         
         footer {
             text-align: center;
             padding: 2rem 0;
-            color: white;
-            opacity: 0.8;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+            margin-top: 2rem;
         }
         
         @media (max-width: 768px) {
@@ -265,7 +264,7 @@
         <section class="hero">
             <h1>ASCII-Art</h1>
             <p>Transform your text into beautiful ASCII art with ease</p>
-            <div style="margin: 1rem 0;">
+            <div class="badges">
                 <img src="https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml/badge.svg" alt="CI">
                 <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
                 <img src="https://goreportcard.com/badge/github.com/g-laliotis/ascii-art" alt="Go Report">
@@ -345,7 +344,6 @@ make run           # Run with example</div>
     </footer>
 
     <script>
-        // Simple ASCII art generator for demo (limited characters)
         const asciiChars = {
             'H': [
                 ' _    _ ',
@@ -411,7 +409,6 @@ make run           # Run with example</div>
                         lines[i] += asciiChars[char][i];
                     }
                 } else {
-                    // Fallback for unsupported characters
                     for (let i = 0; i < 7; i++) {
                         lines[i] += '??? ';
                     }
@@ -421,10 +418,8 @@ make run           # Run with example</div>
             output.textContent = lines.join('\n');
         }
 
-        // Generate initial demo
         generateArt();
 
-        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
