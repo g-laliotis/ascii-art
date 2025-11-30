@@ -2,7 +2,13 @@
 
 > Transform your text into beautiful ASCII art
 
+[![CI](https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml/badge.svg)](https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Report Card](https://goreportcard.com/badge/github.com/g-laliotis/ascii-art)](https://goreportcard.com/report/github.com/g-laliotis/ascii-art)
+
 ASCII-Art is a command-line tool that converts regular text into stylized ASCII art using predefined banner templates. Perfect for creating eye-catching headers, banners, or just having fun with text!
+
+🌐 **[Try the Live Demo](https://g-laliotis.github.io/ascii-art/)**
 
 ## ✨ Features
 
@@ -15,19 +21,15 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository (Zone01)
-git clone https://platform.zone01.gr/git/glalioti/ascii-art.git
-cd ascii-art
-
-# Or clone from GitHub
+# Clone the repository
 git clone https://github.com/g-laliotis/ascii-art.git
 cd ascii-art
 
-# Initialize Go module
-go mod init ascii-art
-
 # Run directly
 go run ./cmd/ascii-art "Hello World"
+
+# Or use Makefile
+make run
 ```
 
 ## 📝 Example Output
@@ -49,24 +51,30 @@ $
 ### Prerequisites
 - Go 1.19 or higher
 
-### Build from Source
+### Using Makefile
+
+```bash
+# Build executable
+make build
+
+# Run tests
+make test
+
+# Install to GOPATH/bin
+make install
+
+# See all available commands
+make help
+```
+
+### Manual Build
 
 ```bash
 # Build executable
 go build -o ascii-art ./cmd/ascii-art
 
-# Run the binary
-./ascii-art "Your Text Here"
-```
-
-### Testing
-
-```bash
 # Run all tests
-go test ./...
-
-# Run with coverage
-go test -cover ./...
+go test -v ./...
 ```
 
 ## 📚 Usage
@@ -124,11 +132,14 @@ ascii-art/
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
 This project follows Go best practices:
 - Standard Go formatting (`go fmt`)
-- Comprehensive unit tests
+- Comprehensive unit tests (100% coverage)
 - Clean, readable code structure
 - Proper error handling
+- CI/CD with GitHub Actions
 
 ## 👥 Authors
 
@@ -139,7 +150,14 @@ This project follows Go best practices:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🌟 Links
+
+- 🌐 [Live Demo & Documentation](https://g-laliotis.github.io/ascii-art/)
+- 📚 [Contributing Guidelines](CONTRIBUTING.md)
+- 🐛 [Report Issues](https://github.com/g-laliotis/ascii-art/issues)
+- 💡 [Feature Requests](https://github.com/g-laliotis/ascii-art/issues)
+
 ## 🎓 Acknowledgments
 
-This project is part of the Zone01 curriculum.
+This project is part of the Zone01 curriculum and is now open-source for the community.
 
