@@ -15,8 +15,12 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
+# Clone the repository (Zone01)
 git clone https://platform.zone01.gr/git/glalioti/ascii-art.git
+cd ascii-art
+
+# Or clone from GitHub
+git clone https://github.com/g-laliotis/ascii-art.git
 cd ascii-art
 
 # Initialize Go module
