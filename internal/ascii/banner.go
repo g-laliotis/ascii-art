@@ -54,8 +54,8 @@ func parseBannerLines(lines []string) map[rune][]string {
 			// Make underscore fat by adding thickness
 			modifiedLines := make([]string, 8)
 			copy(modifiedLines, charLines)
-			modifiedLines[6] = " ______ " // Add line above
-			modifiedLines[7] = "|______|"	// Make it thick like dash
+			modifiedLines[6] = " _______ " // Add line above (9 chars)
+			modifiedLines[7] = "|_______|" // Make it thick like dash (9 chars)
 			charMap[char] = modifiedLines
 		} else {
 			charMap[char] = charLines
