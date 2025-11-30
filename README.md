@@ -23,13 +23,13 @@ cd ascii-art
 go mod init ascii-art
 
 # Run directly
-go run ./cmd/ascii-art "Hello World"
+go run . "Hello World"
 ```
 
 ## 📝 Example Output
 
 ```bash
-$ go run ./cmd/ascii-art "Hello"
+$ go run . "Hello"
  _    _          _   _          
 | |  | |        | | | |         
 | |__| |   ___  | | | |   ___   
@@ -49,7 +49,7 @@ $ go run ./cmd/ascii-art "Hello"
 
 ```bash
 # Build executable
-go build -o ascii-art ./cmd/ascii-art
+go build -o ascii-art .
 
 # Run the binary
 ./ascii-art "Your Text Here"
@@ -69,28 +69,30 @@ go test -cover ./...
 
 ```bash
 # Basic text
-go run ./cmd/ascii-art "Hello"
+go run . "Hello"
 
 # Multi-line text
-go run ./cmd/ascii-art "Hello\nWorld"
+go run . "Hello\nWorld"
 
 # Special characters and numbers
-go run ./cmd/ascii-art "Hello There! 123"
+go run . "Hello There! 123"
 
 # Empty string (prints nothing)
-go run ./cmd/ascii-art ""
+go run . ""
 ```
 
 ## 📁 Project Structure
 
 ```
 ascii-art/
-├── cmd/ascii-art/main.go      # Entry point
+├── main.go                    # Entry point
+├── cmd/ascii-art/main.go      # Alternative entry point
 ├── internal/ascii/            # Core logic and tests
 ├── internal/version/          # Version info
 ├── assets/
 │   └── standard.txt           # Standard banner template
-└── go.mod                     # Go module
+├── go.mod                     # Go module
+└── LICENSE                    # MIT License
 ```
 
 ## 📖 How It Works
@@ -109,7 +111,16 @@ This project follows Go best practices:
 - Clean, readable code structure
 - Proper error handling
 
+## 👥 Authors
+
+- **Giorgos Laliotis**
+- **Stavros Gkraikas**
+
 ## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🎓 Acknowledgments
 
 This project is part of the Zone01 curriculum.
 
