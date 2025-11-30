@@ -14,8 +14,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
         }
         
@@ -26,13 +26,14 @@
         }
         
         header {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         nav {
@@ -103,14 +104,23 @@
         }
         
         .btn-primary {
-            background: #ff6b6b;
+            background: #238636;
             color: white;
         }
         
+        .btn-primary:hover {
+            background: #2ea043;
+        }
+        
         .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
+            border-color: rgba(255, 255, 255, 0.5);
         }
         
         .btn:hover {
@@ -119,17 +129,19 @@
         }
         
         .demo {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             margin: 2rem 0;
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
         
         .demo h2 {
             text-align: center;
             margin-bottom: 2rem;
-            color: #333;
+            color: #e0e0e0;
         }
         
         .demo-container {
@@ -146,21 +158,28 @@
         .demo-input input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 6px;
             font-size: 1rem;
             margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+        
+        .demo-input input::placeholder {
+            color: rgba(224, 224, 224, 0.6);
         }
         
         .demo-output {
-            background: #1a1a1a;
-            color: #00ff00;
+            background: #0d1117;
+            color: #58a6ff;
             padding: 1rem;
             border-radius: 6px;
             font-family: 'Courier New', monospace;
             font-size: 0.8rem;
             overflow-x: auto;
             white-space: pre;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .features {
@@ -171,12 +190,13 @@
         }
         
         .feature {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
             border-radius: 12px;
             text-align: center;
-            color: white;
+            color: #e0e0e0;
         }
         
         .feature-icon {
@@ -185,21 +205,25 @@
         }
         
         .installation {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
             border-radius: 12px;
             margin: 2rem 0;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            color: #e0e0e0;
         }
         
         .code-block {
-            background: #1a1a1a;
-            color: #00ff00;
+            background: #0d1117;
+            color: #58a6ff;
             padding: 1rem;
             border-radius: 6px;
             font-family: 'Courier New', monospace;
             margin: 1rem 0;
             overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         footer {
@@ -241,6 +265,12 @@
         <section class="hero">
             <h1>ASCII-Art</h1>
             <p>Transform your text into beautiful ASCII art with ease</p>
+            <div style="margin: 1rem 0;">
+                <img src="https://github.com/g-laliotis/ascii-art/actions/workflows/ci.yml/badge.svg" alt="CI">
+                <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+                <img src="https://goreportcard.com/badge/github.com/g-laliotis/ascii-art" alt="Go Report">
+                <img src="https://img.shields.io/badge/build-Makefile-blue.svg" alt="Makefile">
+            </div>
             <div class="cta-buttons">
                 <a href="https://github.com/g-laliotis/ascii-art" class="btn btn-primary">View on GitHub</a>
                 <a href="#demo" class="btn btn-secondary">Try Demo</a>
