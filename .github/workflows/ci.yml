@@ -22,8 +22,11 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
     
+    - name: Download dependencies
+      run: go mod download
+    
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./cmd/ascii-art
     
     - name: Test
       run: go test -v ./...
