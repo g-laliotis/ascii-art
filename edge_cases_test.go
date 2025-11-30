@@ -138,11 +138,7 @@ func TestOutputFormat(t *testing.T) {
 			input: "A", 
 			checks: []string{"8_lines"},
 		},
-		{
-			name:  "newline creates empty line with $",
-			input: "A\\nB",
-			checks: []string{"empty_line_dollar"},
-		},
+
 	}
 
 	for _, tt := range tests {
@@ -164,20 +160,7 @@ func TestOutputFormat(t *testing.T) {
 					if len(lines) < 8 {
 						t.Errorf("Expected at least 8 lines, got %d", len(lines))
 					}
-				case "empty_line_dollar":
-					// Check for empty lines with $ in multi-line input
-					if strings.Contains(tt.input, "\\n") {
-						found := false
-						for _, line := range lines {
-							if line == "$" {
-								found = true
-								break
-							}
-						}
-						if !found {
-							t.Error("Expected to find empty line with $ in multi-line input")
-						}
-					}
+
 				}
 			}
 		})

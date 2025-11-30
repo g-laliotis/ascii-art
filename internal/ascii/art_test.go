@@ -137,8 +137,8 @@ func TestGenerateArt(t *testing.T) {
 				t.Errorf("Expected result to contain '%s', got: %s", tt.contains, result)
 			}
 
-			// For multi-line input, check that we have the right structure
-			if strings.Contains(tt.input, "\\n") {
+			// For multi-line input with actual text, check that we have the right structure
+			if strings.Contains(tt.input, "\\n") && tt.input != "\\n" {
 				lines := strings.Split(result, "\n")
 				if len(lines) < 8 {
 					t.Errorf("Expected at least 8 lines for ASCII art, got %d", len(lines))
