@@ -114,12 +114,31 @@ For very long strings (like the full alphabet), the output may be too wide for y
 ```
 ascii-art/
 ├── cmd/ascii-art/main.go      # Entry point
-├── internal/ascii/            # Core logic and tests
-├── internal/version/          # Version info
+├── internal/
+│   ├── ascii/                 # Core ASCII generation logic
+│   │   ├── art.go            # ASCII art generation functions
+│   │   ├── banner.go         # Banner file loading and parsing
+│   │   ├── art_test.go       # Unit tests for art generation
+│   │   └── banner_test.go    # Unit tests for banner loading
+│   └── version/
+│       └── version.go        # Version information
 ├── assets/
-│   └── standard.txt           # Standard banner template
-├── go.mod                     # Go module
-└── LICENSE                    # MIT License
+│   └── standard.txt          # Standard banner template (8 lines per character)
+├── docs/
+│   └── index.html           # GitHub Pages website with live demo
+├── .github/
+│   └── workflows/
+│       └── ci.yml           # GitHub Actions CI/CD pipeline
+├── testdata/                 # Test input/output files (if any)
+├── main_test.go             # Integration tests using exec.Command
+├── edge_cases_test.go       # Comprehensive edge case tests
+├── go.mod                   # Go module definition
+├── go.sum                   # Go module checksums
+├── Makefile                 # Build automation (build, test, install)
+├── README.md                # Project documentation
+├── CHANGELOG.md             # Version history and changes
+├── CONTRIBUTING.md          # Contribution guidelines
+└── LICENSE                  # MIT License
 ```
 
 ## 📖 How It Works
@@ -151,9 +170,14 @@ This project follows Go best practices:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 📋 Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes, new features, and bug fixes.
+
 ## 🌟 Links
 
 - 🌐 [Live Demo & Documentation](https://g-laliotis.github.io/ascii-art/)
+- 📋 [Changelog](CHANGELOG.md)
 - 📚 [Contributing Guidelines](CONTRIBUTING.md)
 - 🐛 [Report Issues](https://github.com/g-laliotis/ascii-art/issues)
 - 💡 [Feature Requests](https://github.com/g-laliotis/ascii-art/issues)
