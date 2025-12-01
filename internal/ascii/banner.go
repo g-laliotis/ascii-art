@@ -37,15 +37,15 @@ func parseBannerLines(lines []string) map[rune][]string {
 	char := rune(32)
 	
 	for i := 0; i < len(lines); i += 9 { // Each character takes 8 lines + 1 separator
-		if i+7 >= len(lines) {
+		if i+8 >= len(lines) {
 			break
 		}
 		
-		// Extract 8 lines for this character
+		// Extract 8 lines for this character (skip the first empty separator line)
 		charLines := make([]string, 8)
 		for j := 0; j < 8; j++ {
-			if i+j < len(lines) {
-				charLines[j] = lines[i+j]
+			if i+j+1 < len(lines) {
+				charLines[j] = lines[i+j+1]
 			}
 		}
 		
