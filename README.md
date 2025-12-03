@@ -16,6 +16,7 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 - 🎨 ASCII art using `standard` banner style (with `shadow` and `thinkertoy` support planned)
 - 📝 Support for letters, numbers, spaces, and special characters
 - 🔄 Multi-line output with `\n` support
+- 📱 **Automatic terminal width detection and wrapping** - adapts to any screen size
 - ⚡ Fast and lightweight - uses only Go standard library
 - 🎯 Simple command-line interface
 
@@ -93,21 +94,18 @@ go run ./cmd/ascii-art "Hello There! 123"
 # Empty string (prints nothing)
 go run ./cmd/ascii-art ""
 
-# Long text (save to file for better viewing)
-go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt
+# Long text (automatically wraps to terminal width)
+go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ```
 
-### 📏 Viewing Long Output
+### 📱 Terminal Width Adaptation
 
-For very long strings (like the full alphabet), the output may be too wide for your terminal:
+The program automatically detects your terminal width and wraps long text accordingly:
 
-**Problem**: Lines wrap and appear distorted in terminal
-
-**Solutions**:
-1. **Save to file**: `go run ./cmd/ascii-art "long text" > output.txt`
-2. **Use wider terminal**: Increase terminal width
-3. **Text editor**: Open output file with word wrap disabled
-4. **Horizontal scroll**: Use `less -S output.txt` for scrollable viewing
+- **Smart wrapping**: Automatically breaks long text at character boundaries
+- **Any terminal size**: Works on narrow mobile terminals to wide desktop screens
+- **Preserves formatting**: Each wrapped section maintains proper ASCII art structure
+- **Fallback support**: Uses COLUMNS environment variable or defaults to 80 characters
 
 ## 📁 Project Structure
 
@@ -144,11 +142,13 @@ ascii-art/
 ## 📖 How It Works
 
 1. **Input**: Takes a string as command-line argument
-2. **Processing**: Maps each character to its 8-line ASCII representation
-3. **Output**: Combines characters horizontally to create ASCII art
-4. **Format**: Each character is exactly 8 lines tall
-5. **Support**: ASCII characters 32-126 (printable characters)
-6. **Width**: Characters have variable widths (W is wider than I, etc.)
+2. **Terminal Detection**: Automatically detects terminal width using system calls
+3. **Processing**: Maps each character to its 8-line ASCII representation
+4. **Smart Wrapping**: Calculates character widths and wraps when exceeding terminal width
+5. **Output**: Combines characters horizontally with automatic line breaks
+6. **Format**: Each character is exactly 8 lines tall
+7. **Support**: ASCII characters 32-126 (printable characters)
+8. **Adaptive Width**: Characters have variable widths, automatically handled
 
 ## 🤝 Contributing
 
