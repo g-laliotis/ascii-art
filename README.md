@@ -127,11 +127,9 @@ ascii-art/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml           # GitHub Actions CI/CD pipeline
-├── testdata/                 # Test input/output files (if any)
 ├── main_test.go             # Integration tests using exec.Command
 ├── edge_cases_test.go       # Comprehensive edge case tests
 ├── go.mod                   # Go module definition
-├── go.sum                   # Go module checksums
 ├── Makefile                 # Build automation (build, test, install)
 ├── README.md                # Project documentation
 ├── CHANGELOG.md             # Version history and changes
