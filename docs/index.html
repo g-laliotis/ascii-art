@@ -96,6 +96,10 @@ make test</div>
                     <p>High-quality ASCII art using standard banner template with support for all printable ASCII characters</p>
                 </div>
                 <div class="card">
+                    <h3>🌈 Color Support</h3>
+                    <p>Colorize entire output or specific substrings with ANSI colors (red, green, blue, yellow, magenta, cyan, white, orange)</p>
+                </div>
+                <div class="card">
                     <h3>🔄 Multi-line Support</h3>
                     <p>Handle newlines (\n) for complex layouts and multi-line ASCII art compositions</p>
                 </div>
@@ -106,6 +110,10 @@ make test</div>
                 <div class="card">
                     <h3>🎯 Character Perfect</h3>
                     <p>Supports letters, numbers, spaces, and special characters with precise 8-line formatting</p>
+                </div>
+                <div class="card">
+                    <h3>📱 Terminal Adaptive</h3>
+                    <p>Automatic terminal width detection and smart text wrapping for any screen size</p>
                 </div>
             </div>
         </div>
@@ -146,14 +154,19 @@ make help          # Show all available commands</div>
             <div class="code"># Basic text
 go run ./cmd/ascii-art "Hello"
 
+# Color entire output
+go run ./cmd/ascii-art --color=red "Hello"
+
+# Color specific substring
+go run ./cmd/ascii-art --color=blue kit "a king kitten have kit"
+
 # Multi-line text  
 go run ./cmd/ascii-art "Hello\nWorld"
 
 # Special characters and numbers
 go run ./cmd/ascii-art "Hello There! 123"
 
-# Save long output to file
-go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ" > output.txt</div>
+# Available colors: red, green, yellow, blue, magenta, cyan, white, orange</div>
         </div>
 
         <div class="section">
