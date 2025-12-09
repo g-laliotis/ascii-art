@@ -14,6 +14,7 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 ## ✨ Features
 
 - 🎨 ASCII art using `standard` banner style (with `shadow` and `thinkertoy` support planned)
+- 🌈 **Color support** - colorize entire output or specific substrings with ANSI colors
 - 📝 Support for letters, numbers, spaces, and special characters
 - 🔄 Multi-line output with `\n` support
 - 📱 **Automatic terminal width detection and wrapping** - adapts to any screen size
@@ -90,6 +91,14 @@ go run ./cmd/ascii-art "Hello\nWorld"
 
 # Special characters and numbers
 go run ./cmd/ascii-art "Hello There! 123"
+
+# Color entire output
+go run ./cmd/ascii-art --color=red "Hello"
+
+# Color specific substring
+go run ./cmd/ascii-art --color=blue kit "a king kitten have kit"
+
+# Available colors: red, green, yellow, blue, magenta, cyan, white, orange
 
 # Empty string (prints nothing)
 go run ./cmd/ascii-art ""

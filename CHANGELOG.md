@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-12-20
+
+### Added
+- Color support with `--color=<color>` flag
+- ANSI color codes: red, green, yellow, blue, magenta, cyan, white, orange
+- Ability to color entire ASCII art output
+- Ability to color specific substrings within output
+- Support for multiple occurrences of substring coloring
+- Accurate character position calculation for substring coloring
+- Usage message for incorrect flag format
+- Comprehensive unit tests for color functionality
+
 ## [1.0.0] - 2024-12-19
 
 ### Added
@@ -46,5 +58,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Professional badges (CI, license, Go report card, Makefile)
 - Comprehensive usage examples and troubleshooting guide
 
-[Unreleased]: https://github.com/g-laliotis/ascii-art/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/g-laliotis/ascii-art/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/g-laliotis/ascii-art/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/g-laliotis/ascii-art/releases/tag/v1.0.0
