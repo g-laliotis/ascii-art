@@ -125,8 +125,10 @@ ascii-art/
 │   ├── ascii/                 # Core ASCII generation logic
 │   │   ├── art.go            # ASCII art generation functions
 │   │   ├── banner.go         # Banner file loading and parsing
+│   │   ├── color.go          # Color support with ANSI codes
 │   │   ├── art_test.go       # Unit tests for art generation
-│   │   └── banner_test.go    # Unit tests for banner loading
+│   │   ├── banner_test.go    # Unit tests for banner loading
+│   │   └── color_test.go     # Unit tests for color functionality
 │   └── version/
 │       └── version.go        # Version information
 ├── assets/
