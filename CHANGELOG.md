@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2024-12-20
+
+### Fixed
+- Test cases to properly handle usage messages for invalid flag formats
+
 ## [1.1.0] - 2024-12-20
 
 ### Added
@@ -58,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Professional badges (CI, license, Go report card, Makefile)
 - Comprehensive usage examples and troubleshooting guide
 
-[Unreleased]: https://github.com/g-laliotis/ascii-art/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/g-laliotis/ascii-art/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/g-laliotis/ascii-art/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/g-laliotis/ascii-art/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/g-laliotis/ascii-art/releases/tag/v1.0.0
