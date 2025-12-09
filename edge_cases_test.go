@@ -96,12 +96,13 @@ func TestEdgeCases(t *testing.T) {
 // TestInvalidInputs tests how the program handles invalid inputs
 func TestInvalidInputs(t *testing.T) {
 	tests := []struct {
-		name string
-		args []string
+		name         string
+		args         []string
+		expectUsage  bool
 	}{
-		{"no arguments", []string{}},
-		{"too many arguments", []string{"arg1", "arg2", "arg3"}},
-		{"three arguments", []string{"a", "b", "c"}},
+		{"no arguments", []string{}, false},
+		{"invalid flag format", []string{"color=red", "test"}, true},
+		{"too many args with flag", []string{"--color=red", "a", "b", "c", "d"}, true},
 	}
 
 	for _, tt := range tests {
@@ -113,9 +114,14 @@ func TestInvalidInputs(t *testing.T) {
 			
 			output, _ := cmd.Output()
 			
-			// Should produce no output for invalid number of arguments
-			if len(output) > 0 {
-				t.Errorf("Expected no output for invalid args, got: %s", string(output))
+			if tt.expectUsage {
+				if !strings.Contains(string(output), "Usage:") {
+					t.Errorf("Expected usage message, got: %s", string(output))
+				}
+			} else {
+				if len(output) > 0 {
+					t.Errorf("Expected no output, got: %s", string(output))
+				}
 			}
 		})
 	}

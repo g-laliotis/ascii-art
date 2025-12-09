@@ -84,11 +84,12 @@ func TestMainFunction(t *testing.T) {
 
 func TestMainEdgeCases(t *testing.T) {
 	tests := []struct {
-		name string
-		args []string
+		name        string
+		args        []string
+		expectUsage bool
 	}{
-		{"no arguments", []string{}},
-		{"too many arguments", []string{"arg1", "arg2"}},
+		{"no arguments", []string{}, false},
+		{"invalid flag", []string{"color=red", "test"}, true},
 	}
 
 	for _, tt := range tests {
@@ -97,9 +98,14 @@ func TestMainEdgeCases(t *testing.T) {
 			cmd.Args = append(cmd.Args, tt.args...)
 			output, _ := cmd.Output()
 			
-			// Should produce no output for invalid arguments
-			if len(output) > 0 {
-				t.Errorf("Expected no output for %s, got: %s", tt.name, string(output))
+			if tt.expectUsage {
+				if !strings.Contains(string(output), "Usage:") {
+					t.Errorf("Expected usage message for %s, got: %s", tt.name, string(output))
+				}
+			} else {
+				if len(output) > 0 {
+					t.Errorf("Expected no output for %s, got: %s", tt.name, string(output))
+				}
 			}
 		})
 	}
