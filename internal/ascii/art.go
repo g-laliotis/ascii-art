@@ -4,8 +4,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"syscall"
-	"unsafe"
 )
 
 // GenerateArt converts input text to ASCII art using the provided character map
@@ -64,32 +62,22 @@ func generateLineArt(line string, charMap map[rune][]string) []string {
 	return artLines
 }
 
-// getTerminalWidth returns the terminal width, defaults to 80 if unable to detect
+// getTerminalWidth returns the terminal width, defaults to 200 if unable to detect
 func getTerminalWidth() int {
-	type winsize struct {
-		Row    uint16
-		Col    uint16
-		Xpixel uint16
-		Ypixel uint16
+	// Try OS-specific detection first
+	if width := getTerminalWidthOS(); width > 0 {
+		return width
 	}
-
-	ws := &winsize{}
-	retVal, _, _ := syscall.Syscall(syscall.SYS_IOCTL,
-		uintptr(os.Stdout.Fd()),
-		uintptr(syscall.TIOCGWINSZ),
-		uintptr(unsafe.Pointer(ws)))
-
-	if int(retVal) == -1 {
-		// Fallback: try COLUMNS environment variable
-		if cols := os.Getenv("COLUMNS"); cols != "" {
-			if width, err := strconv.Atoi(cols); err == nil {
-				return width
-			}
+	
+	// Try COLUMNS environment variable
+	if cols := os.Getenv("COLUMNS"); cols != "" {
+		if width, err := strconv.Atoi(cols); err == nil {
+			return width
 		}
-		// Default fallback
-		return 80
 	}
-	return int(ws.Col)
+	
+	// Default fallback
+	return 200
 }
 
 // generateLineArtWithWrap generates ASCII art for a line with terminal width wrapping
