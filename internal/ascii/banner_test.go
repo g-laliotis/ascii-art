@@ -35,3 +35,26 @@ func TestLoadBannerFileNotFound(t *testing.T) {
 		t.Error("Expected error for nonexistent file")
 	}
 }
+
+func TestLoadMultipleBanners(t *testing.T) {
+	banners := []string{"../../assets/standard.txt", "../../assets/thinkertoy.txt"}
+	testChars := []rune{'A', 'a', '1', '!', ' '}
+
+	for _, banner := range banners {
+		t.Run(banner, func(t *testing.T) {
+			charMap, err := LoadBanner(banner)
+			if err != nil {
+				t.Errorf("LoadBanner(%s) error = %v", banner, err)
+				return
+			}
+
+			for _, char := range testChars {
+				if lines, exists := charMap[char]; !exists {
+					t.Errorf("Banner %s missing character %c", banner, char)
+				} else if len(lines) != 8 {
+					t.Errorf("Banner %s character %c has %d lines, want 8", banner, char, len(lines))
+				}
+			}
+		})
+	}
+}
