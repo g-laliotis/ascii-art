@@ -29,6 +29,10 @@ func main() {
 		if strings.HasPrefix(args[0], "--color=") {
 			colorFlag = strings.TrimPrefix(args[0], "--color=")
 			text = args[1]
+		} else if strings.Contains(args[0], "=") && !strings.HasPrefix(args[0], "--") {
+			// Invalid flag format (e.g., "color=red")
+			printUsage()
+			return
 		} else {
 			text = args[0]
 			banner = args[1]
