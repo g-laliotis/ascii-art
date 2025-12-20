@@ -13,13 +13,14 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 
 ## ✨ Features
 
-- 🎨 ASCII art using `standard` banner style (with `shadow` and `thinkertoy` support planned)
+- 🎨 **Multiple banner styles** - `standard`, `shadow`, and `thinkertoy` ASCII art fonts
 - 🌈 **Color support** - colorize entire output or specific substrings with ANSI colors
+- 💾 **File output** - save ASCII art to files with `--output=filename`
 - 📝 Support for letters, numbers, spaces, and special characters
 - 🔄 Multi-line output with `\n` support
-- 📱 **Automatic terminal width detection and wrapping** - adapts to any screen size
+- 📱 **Cross-platform terminal width detection** - adapts to any screen size (Unix/Windows)
 - ⚡ Fast and lightweight - uses only Go standard library
-- 🎯 Simple command-line interface
+- 🎯 Simple and flexible command-line interface
 
 ## 🚀 Quick Start
 
@@ -83,8 +84,13 @@ go test -v ./...
 ## 📚 Usage
 
 ```bash
-# Basic text
+# Basic text (default: standard banner)
 go run ./cmd/ascii-art "Hello"
+
+# Different banner styles
+go run ./cmd/ascii-art "Hello" standard
+go run ./cmd/ascii-art "Hello" shadow
+go run ./cmd/ascii-art "Hello" thinkertoy
 
 # Multi-line text
 go run ./cmd/ascii-art "Hello\nWorld"
@@ -94,9 +100,18 @@ go run ./cmd/ascii-art "Hello There! 123"
 
 # Color entire output
 go run ./cmd/ascii-art --color=red "Hello"
+go run ./cmd/ascii-art --color=blue "Hello" shadow
 
 # Color specific substring
-go run ./cmd/ascii-art --color=blue kit "a king kitten have kit"
+go run ./cmd/ascii-art --color=green kit "a king kitten have kit"
+go run ./cmd/ascii-art --color=yellow kit "Hello kit" thinkertoy
+
+# Save to file
+go run ./cmd/ascii-art --output=result.txt "Hello"
+go run ./cmd/ascii-art --output=art.txt "Hello" shadow
+
+# Combine all features
+go run ./cmd/ascii-art --color=red --output=colored.txt "Hello" thinkertoy
 
 # Available colors: red, green, yellow, blue, magenta, cyan, white, orange
 
@@ -120,32 +135,39 @@ The program automatically detects your terminal width and wraps long text accord
 
 ```
 ascii-art/
-├── cmd/ascii-art/main.go      # Entry point
+├── cmd/ascii-art/main.go          # Entry point with enhanced argument parsing
 ├── internal/
-│   ├── ascii/                 # Core ASCII generation logic
-│   │   ├── art.go            # ASCII art generation functions
-│   │   ├── banner.go         # Banner file loading and parsing
-│   │   ├── color.go          # Color support with ANSI codes
-│   │   ├── art_test.go       # Unit tests for art generation
-│   │   ├── banner_test.go    # Unit tests for banner loading
-│   │   └── color_test.go     # Unit tests for color functionality
+│   ├── ascii/                     # Core ASCII generation logic
+│   │   ├── art.go                # ASCII art generation with terminal width detection
+│   │   ├── banner.go             # Banner file loading and parsing
+│   │   ├── color.go              # Enhanced color support with ANSI codes
+│   │   ├── output.go             # File output functionality
+│   │   ├── terminal_unix.go      # Unix/Linux/macOS terminal width detection
+│   │   ├── terminal_windows.go   # Windows terminal width detection
+│   │   ├── art_test.go          # Unit tests for art generation
+│   │   ├── art_banner_test.go   # Tests for different banner styles
+│   │   ├── banner_test.go       # Enhanced banner loading tests
+│   │   ├── color_test.go        # Unit tests for color functionality
+│   │   └── output_test.go       # Tests for file output
 │   └── version/
-│       └── version.go        # Version information
+│       └── version.go            # Version information
 ├── assets/
-│   └── standard.txt          # Standard banner template (8 lines per character)
+│   ├── standard.txt              # Standard banner template (8 lines per character)
+│   ├── shadow.txt                # Shadow banner style
+│   └── thinkertoy.txt            # Thinkertoy banner style
 ├── docs/
-│   └── index.html           # GitHub Pages website with live demo
+│   └── index.html               # GitHub Pages website with live demo
 ├── .github/
 │   └── workflows/
-│       └── ci.yml           # GitHub Actions CI/CD pipeline
-├── main_test.go             # Integration tests using exec.Command
-├── edge_cases_test.go       # Comprehensive edge case tests
-├── go.mod                   # Go module definition
-├── Makefile                 # Build automation (build, test, install)
-├── README.md                # Project documentation
-├── CHANGELOG.md             # Version history and changes
-├── CONTRIBUTING.md          # Contribution guidelines
-└── LICENSE                  # MIT License
+│       └── ci.yml               # GitHub Actions CI/CD pipeline
+├── main_test.go                 # Integration tests using exec.Command
+├── edge_cases_test.go           # Comprehensive edge case tests
+├── go.mod                       # Go module definition
+├── Makefile                     # Enhanced build automation
+├── README.md                    # Complete project documentation
+├── CHANGELOG.md                 # Version history and changes
+├── CONTRIBUTING.md              # Contribution guidelines
+└── LICENSE                      # MIT License
 ```
 
 ## 📖 How It Works
