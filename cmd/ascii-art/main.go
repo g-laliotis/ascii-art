@@ -24,9 +24,11 @@ func main() {
 
 	switch len(args) {
 	case 1:
+		// "text" -> use default standard banner
 		text = args[0]
 	case 2:
 		if strings.HasPrefix(args[0], "--color=") {
+			// "--color=red text" -> color entire text
 			colorFlag = strings.TrimPrefix(args[0], "--color=")
 			text = args[1]
 		} else if strings.Contains(args[0], "=") && !strings.HasPrefix(args[0], "--") {
@@ -34,11 +36,13 @@ func main() {
 			printUsage()
 			return
 		} else {
+			// "text banner" -> use specified banner
 			text = args[0]
 			banner = args[1]
 		}
 	case 3:
 		if strings.HasPrefix(args[0], "--color=") {
+			// "--color=red substring text" -> color specific substring
 			colorFlag = strings.TrimPrefix(args[0], "--color=")
 			substring = args[1]
 			text = args[2]
@@ -49,6 +53,7 @@ func main() {
 		}
 	case 4:
 		if strings.HasPrefix(args[0], "--color=") {
+			// "--color=red substring text banner" -> color substring with specific banner
 			colorFlag = strings.TrimPrefix(args[0], "--color=")
 			substring = args[1]
 			text = args[2]
@@ -58,6 +63,7 @@ func main() {
 			return
 		}
 	default:
+		// Too many or no arguments
 		if len(args) > 0 {
 			printUsage()
 		}
