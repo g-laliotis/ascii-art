@@ -129,7 +129,8 @@ The program automatically detects your terminal width and wraps long text accord
 - **Smart wrapping**: Automatically breaks long text at character boundaries
 - **Any terminal size**: Works on narrow mobile terminals to wide desktop screens
 - **Preserves formatting**: Each wrapped section maintains proper ASCII art structure
-- **Fallback support**: Uses COLUMNS environment variable or defaults to 80 characters
+- **Color preservation**: Substring coloring works correctly across wrapped lines
+- **Fallback support**: Uses COLUMNS environment variable or defaults to 200 characters
 
 ## 📁 Project Structure
 

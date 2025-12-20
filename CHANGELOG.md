@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Color substring handling**: Fixed multiple occurrence coloring in same text
 - **Cross-platform compatibility**: Proper terminal width detection on Windows and Unix systems
 - **Banner loading**: Improved error handling for different banner files
+- **Color wrapping**: Fixed color application across wrapped text lines - substrings now maintain color when text wraps
 
 ### Technical Details
 - Added build tags for OS-specific code (`//go:build unix`, `//go:build windows`)
