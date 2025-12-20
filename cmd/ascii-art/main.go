@@ -40,16 +40,12 @@ func main() {
 	case 3:
 		if strings.HasPrefix(args[0], "--color=") {
 			colorFlag = strings.TrimPrefix(args[0], "--color=")
-			if len(args) == 3 {
-				substring = args[1]
-				text = args[2]
-			} else {
-				text = args[1]
-				banner = args[2]
-			}
+			substring = args[1]
+			text = args[2]
 		} else {
-			text = args[0]
-			banner = args[1]
+			// 3 args without color flag is invalid
+			printUsage()
+			return
 		}
 	case 4:
 		if strings.HasPrefix(args[0], "--color=") {
