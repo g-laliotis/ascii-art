@@ -6,8 +6,26 @@ import (
 	"strings"
 )
 
+// ANSI color codes (shared with color.go)
+var colorMap = map[string]string{
+	"red":     "\033[31m",
+	"green":   "\033[32m",
+	"yellow":  "\033[33m",
+	"blue":    "\033[34m",
+	"magenta": "\033[35m",
+	"cyan":    "\033[36m",
+	"white":   "\033[37m",
+	"orange":  "\033[38;5;208m",
+	"reset":   "\033[0m",
+}
+
 // GenerateArt converts input text to ASCII art using the provided character map
 func GenerateArt(text string, charMap map[rune][]string) string {
+	return GenerateArtWithColor(text, charMap, "", "")
+}
+
+// GenerateArtWithColor converts input text to ASCII art with optional color support
+func GenerateArtWithColor(text string, charMap map[rune][]string, substring, color string) string {
 	if text == "" {
 		return ""
 	}
@@ -23,8 +41,8 @@ func GenerateArt(text string, charMap map[rune][]string) string {
 			continue
 		}
 
-		// Generate ASCII art for this line with wrapping
-		artLines := generateLineArtWithWrap(line, charMap)
+		// Generate ASCII art for this line with wrapping and color
+		artLines := generateLineArtWithWrapAndColor(line, charMap, substring, color)
 		result = append(result, artLines...)
 	}
 
@@ -82,18 +100,34 @@ func getTerminalWidth() int {
 
 // generateLineArtWithWrap generates ASCII art for a line with terminal width wrapping
 func generateLineArtWithWrap(text string, charMap map[rune][]string) []string {
+	return generateLineArtWithWrapAndColor(text, charMap, "", "")
+}
+
+// generateLineArtWithWrapAndColor generates ASCII art for a line with terminal width wrapping and color support
+func generateLineArtWithWrapAndColor(text string, charMap map[rune][]string, substring, color string) []string {
 	termWidth := getTerminalWidth()
 	// Reserve 2 characters for $ signs
 	maxWidth := termWidth - 2
 	
 	if maxWidth < 10 {
 		// Terminal too narrow, use original method
-		return generateLineArt(text, charMap)
+		return generateSegmentWithColor(text, charMap, []struct{ start, end int }{}, 0, color)
+	}
+
+	// Find all substring occurrences in the original text first
+	var substringRanges []struct{ start, end int }
+	if substring != "" {
+		for i := 0; i <= len(text)-len(substring); i++ {
+			if text[i:i+len(substring)] == substring {
+				substringRanges = append(substringRanges, struct{ start, end int }{i, i + len(substring)})
+			}
+		}
 	}
 
 	var allLines []string
 	currentText := ""
 	currentWidth := 0
+	textOffset := 0 // Track position in original text
 	
 	for _, char := range text {
 		// Get character width
@@ -109,11 +143,12 @@ func generateLineArtWithWrap(text string, charMap map[rune][]string) []string {
 		
 		// Check if adding this character would exceed terminal width
 		if currentWidth+charWidth > maxWidth && currentText != "" {
-			// Generate art for current text and add to result
-			currentArt := generateLineArt(currentText, charMap)
+			// Generate art for current text segment with color
+			currentArt := generateSegmentWithColor(currentText, charMap, substringRanges, textOffset, color)
 			allLines = append(allLines, currentArt...)
 			
-			// Start new line with current character
+			// Update offset and start new line
+			textOffset += len(currentText)
 			currentText = string(char)
 			currentWidth = charWidth
 		} else {
@@ -125,9 +160,93 @@ func generateLineArtWithWrap(text string, charMap map[rune][]string) []string {
 	
 	// Generate art for remaining text
 	if currentText != "" {
-		currentArt := generateLineArt(currentText, charMap)
+		currentArt := generateSegmentWithColor(currentText, charMap, substringRanges, textOffset, color)
 		allLines = append(allLines, currentArt...)
 	}
 	
 	return allLines
+}
+
+// generateSegmentWithColor generates ASCII art for a text segment with color support based on original text positions
+func generateSegmentWithColor(segmentText string, charMap map[rune][]string, substringRanges []struct{ start, end int }, segmentOffset int, color string) []string {
+	if segmentText == "" {
+		return []string{""}
+	}
+
+	// Initialize 8 lines for the ASCII art
+	artLines := make([]string, 8)
+
+	// Get color code if color is specified
+	var colorCode, resetCode string
+	if color != "" {
+		if code, exists := colorMap[strings.ToLower(color)]; exists {
+			colorCode = code
+			resetCode = colorMap["reset"]
+		}
+	}
+
+	// Process each character in the segment
+	for charPos, char := range segmentText {
+		if charLines, exists := charMap[char]; exists {
+			// Calculate position in original text
+			originalPos := segmentOffset + charPos
+			
+			// Check if this character should be colored
+			shouldColor := false
+			if len(substringRanges) == 0 && colorCode != "" {
+				// Color entire output
+				shouldColor = true
+			} else {
+				// Check if character is within any substring range
+				for _, r := range substringRanges {
+					if originalPos >= r.start && originalPos < r.end {
+						shouldColor = true
+						break
+					}
+				}
+			}
+
+			// Add each line of the character to the corresponding art line
+			for i := 0; i < 8; i++ {
+				if i < len(charLines) {
+					if shouldColor {
+						// Check if we need to start or end color
+						prevCharColored := charPos > 0 && isPositionInRanges(segmentOffset+charPos-1, substringRanges)
+						nextCharColored := charPos < len(segmentText)-1 && isPositionInRanges(segmentOffset+charPos+1, substringRanges)
+						
+						if !prevCharColored {
+							// Start of colored section
+							artLines[i] += colorCode
+						}
+						artLines[i] += charLines[i]
+						if !nextCharColored {
+							// End of colored section
+							artLines[i] += resetCode
+						}
+					} else {
+						artLines[i] += charLines[i]
+					}
+				}
+			}
+		}
+	}
+
+	// Add $ at the end of each non-empty line
+	for i := range artLines {
+		if artLines[i] != "" {
+			artLines[i] += "$"
+		}
+	}
+
+	return artLines
+}
+
+// isPositionInRanges checks if a position is within any of the given ranges
+func isPositionInRanges(pos int, ranges []struct{ start, end int }) bool {
+	for _, r := range ranges {
+		if pos >= r.start && pos < r.end {
+			return true
+		}
+	}
+	return false
 }

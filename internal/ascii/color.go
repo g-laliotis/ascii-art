@@ -2,19 +2,6 @@ package ascii
 
 import "strings"
 
-// ANSI color codes
-var colorMap = map[string]string{
-	"red":     "\033[31m",
-	"green":   "\033[32m",
-	"yellow":  "\033[33m",
-	"blue":    "\033[34m",
-	"magenta": "\033[35m",
-	"cyan":    "\033[36m",
-	"white":   "\033[37m",
-	"orange":  "\033[38;5;208m",
-	"reset":   "\033[0m",
-}
-
 // ApplyColor applies color to specific substring in ASCII art
 func ApplyColor(artLines []string, substring, color, originalText string, charMap map[rune][]string) []string {
 	colorCode, exists := colorMap[strings.ToLower(color)]

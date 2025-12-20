@@ -80,16 +80,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Generate ASCII art
-	result := ascii.GenerateArt(text, charMap)
+	// Generate ASCII art with color support
+	result := ascii.GenerateArtWithColor(text, charMap, substring, colorFlag)
 	if result != "" {
-		// Apply color if flag is present
-		if colorFlag != "" {
-			lines := strings.Split(result, "\n")
-			lines = ascii.ApplyColor(lines, substring, colorFlag, text, charMap)
-			result = strings.Join(lines, "\n")
-		}
-		
 		// Save to file or print to stdout
 		if outputFile != "" {
 			if err := ascii.SaveToFile(outputFile, result+"\n"); err != nil {
