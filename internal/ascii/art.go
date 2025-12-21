@@ -241,6 +241,33 @@ func generateSegmentWithColor(segmentText string, charMap map[rune][]string, sub
 	return artLines
 }
 
+// ApplyAlignment applies the specified alignment to ASCII art lines
+func ApplyAlignment(artLines []string, alignment string) []string {
+	if alignment == "left" || alignment == "" {
+		// Left alignment is the default - no changes needed
+		return artLines
+	}
+
+	// Get current terminal width for alignment calculations
+	termWidth := getTerminalWidth()
+	if termWidth < 10 {
+		// Terminal too narrow for alignment
+		return artLines
+	}
+
+	// Apply the specified alignment
+	switch alignment {
+	case "right":
+		return alignRight(artLines, termWidth)
+	case "center":
+		return alignCenter(artLines, termWidth)
+	case "justify":
+		return alignJustify(artLines, termWidth)
+	default:
+		return artLines
+	}
+}
+
 // isPositionInRanges checks if a position is within any of the given ranges
 func isPositionInRanges(pos int, ranges []struct{ start, end int }) bool {
 	for _, r := range ranges {
@@ -249,4 +276,120 @@ func isPositionInRanges(pos int, ranges []struct{ start, end int }) bool {
 		}
 	}
 	return false
+}
+
+// alignRight aligns ASCII art lines to the right side of the terminal
+func alignRight(artLines []string, termWidth int) []string {
+	var result []string
+	
+	for _, line := range artLines {
+		if line == "" || line == "$" {
+			// Empty lines remain empty
+			result = append(result, line)
+			continue
+		}
+		
+		// Remove the trailing $ to get actual content
+		content := strings.TrimSuffix(line, "$")
+		contentWidth := len(content)
+		
+		// Calculate padding needed for right alignment
+		if contentWidth < termWidth {
+			padding := termWidth - contentWidth
+			// Add padding to the left, then content, then $
+			result = append(result, strings.Repeat(" ", padding)+content+"$")
+		} else {
+			// Content is too wide, keep as is
+			result = append(result, line)
+		}
+	}
+	
+	return result
+}
+
+// alignCenter centers ASCII art lines in the terminal
+func alignCenter(artLines []string, termWidth int) []string {
+	var result []string
+	
+	for _, line := range artLines {
+		if line == "" || line == "$" {
+			// Empty lines remain empty
+			result = append(result, line)
+			continue
+		}
+		
+		// Remove the trailing $ to get actual content
+		content := strings.TrimSuffix(line, "$")
+		contentWidth := len(content)
+		
+		// Calculate padding needed for center alignment
+		if contentWidth < termWidth {
+			totalPadding := termWidth - contentWidth
+			leftPadding := totalPadding / 2
+			// Add left padding, content, then $
+			result = append(result, strings.Repeat(" ", leftPadding)+content+"$")
+		} else {
+			// Content is too wide, keep as is
+			result = append(result, line)
+		}
+	}
+	
+	return result
+}
+
+// alignJustify distributes ASCII art content evenly across the terminal width
+func alignJustify(artLines []string, termWidth int) []string {
+	var result []string
+	
+	for _, line := range artLines {
+		if line == "" || line == "$" {
+			// Empty lines remain empty
+			result = append(result, line)
+			continue
+		}
+		
+		// Remove the trailing $ to get actual content
+		content := strings.TrimSuffix(line, "$")
+		contentWidth := len(content)
+		
+		// For justify, we need to distribute spaces evenly
+		if contentWidth < termWidth && strings.TrimSpace(content) != "" {
+			// Find spaces in the content to distribute extra spacing
+			words := strings.Fields(strings.TrimSpace(content))
+			if len(words) > 1 {
+				// Multiple words - distribute spaces between them
+				totalSpaces := termWidth - len(strings.Join(words, ""))
+				gaps := len(words) - 1
+				if gaps > 0 {
+					spacesPerGap := totalSpaces / gaps
+					extraSpaces := totalSpaces % gaps
+					
+					var justified strings.Builder
+					for i, word := range words {
+						justified.WriteString(word)
+						if i < len(words)-1 {
+							// Add base spaces plus one extra if needed
+							spaces := spacesPerGap
+							if i < extraSpaces {
+								spaces++
+							}
+							justified.WriteString(strings.Repeat(" ", spaces))
+						}
+					}
+					result = append(result, justified.String()+"$")
+				} else {
+					// Single word - center it
+					result = append(result, alignCenter([]string{line}, termWidth)[0])
+				}
+			} else {
+				// Single word or no words - center it
+				result = append(result, alignCenter([]string{line}, termWidth)[0])
+			}
+		} else {
+			// Content is too wide or empty, keep as is
+			result = append(result, line)
+		}
+	}
+	
+	return result
 }

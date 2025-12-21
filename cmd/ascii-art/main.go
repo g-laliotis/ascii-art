@@ -9,16 +9,26 @@ import (
 )
 
 func main() {
-	var colorFlag, substring, text, outputFile, banner string
+	var colorFlag, substring, text, outputFile, banner, alignFlag string
 	banner = "standard" // default banner
 
-	// Parse arguments
+	// Parse arguments - extract flags first
 	args := os.Args[1:]
-	for i, arg := range args {
+	for i := len(args) - 1; i >= 0; i-- {
+		arg := args[i]
+		// Parse --output=filename flag
 		if strings.HasPrefix(arg, "--output=") {
 			outputFile = strings.TrimPrefix(arg, "--output=")
 			args = append(args[:i], args[i+1:]...)
-			break
+		// Parse --align=type flag
+		} else if strings.HasPrefix(arg, "--align=") {
+			alignFlag = strings.TrimPrefix(arg, "--align=")
+			// Validate alignment type
+			if !isValidAlignment(alignFlag) {
+				printUsage()
+				return
+			}
+			args = append(args[:i], args[i+1:]...)
 		}
 	}
 
@@ -85,6 +95,13 @@ func main() {
 	// Generate ASCII art with color support
 	result := ascii.GenerateArtWithColor(text, charMap, substring, colorFlag)
 	if result != "" {
+		// Apply alignment if specified
+		if alignFlag != "" {
+			lines := strings.Split(result, "\n")
+			lines = ascii.ApplyAlignment(lines, alignFlag)
+			result = strings.Join(lines, "\n")
+		}
+		
 		// Save to file or print to stdout
 		if outputFile != "" {
 			if err := ascii.SaveToFile(outputFile, result+"\n"); err != nil {
@@ -97,7 +114,18 @@ func main() {
 	}
 }
 
+// isValidAlignment checks if the alignment type is valid
+func isValidAlignment(align string) bool {
+	validAlignments := []string{"left", "right", "center", "justify"}
+	for _, valid := range validAlignments {
+		if align == valid {
+			return true
+		}
+	}
+	return false
+}
+
 func printUsage() {
-	fmt.Println("Usage: go run . [OPTION] [STRING]")
-	fmt.Println("\nEX: go run . --color=<color> <substring to be colored> \"something\"")
+	fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]")
+	fmt.Println("\nExample: go run . --align=right something standard")
 }
