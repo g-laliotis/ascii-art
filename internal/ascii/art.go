@@ -352,41 +352,17 @@ func alignJustify(artLines []string, termWidth int) []string {
 		content := strings.TrimSuffix(line, "$")
 		contentWidth := len(content)
 		
-		// For justify, we need to distribute spaces evenly
-		if contentWidth < termWidth && strings.TrimSpace(content) != "" {
-			// Find spaces in the content to distribute extra spacing
-			words := strings.Fields(strings.TrimSpace(content))
-			if len(words) > 1 {
-				// Multiple words - distribute spaces between them
-				totalSpaces := termWidth - len(strings.Join(words, ""))
-				gaps := len(words) - 1
-				if gaps > 0 {
-					spacesPerGap := totalSpaces / gaps
-					extraSpaces := totalSpaces % gaps
-					
-					var justified strings.Builder
-					for i, word := range words {
-						justified.WriteString(word)
-						if i < len(words)-1 {
-							// Add base spaces plus one extra if needed
-							spaces := spacesPerGap
-							if i < extraSpaces {
-								spaces++
-							}
-							justified.WriteString(strings.Repeat(" ", spaces))
-						}
-					}
-					result = append(result, justified.String()+"$")
-				} else {
-					// Single word - center it
-					result = append(result, alignCenter([]string{line}, termWidth)[0])
-				}
-			} else {
-				// Single word or no words - center it
-				result = append(result, alignCenter([]string{line}, termWidth)[0])
-			}
+		// For ASCII art, justify means spreading the content across the terminal
+		// If content is much smaller than terminal, add padding to both sides
+		if contentWidth < termWidth {
+			totalPadding := termWidth - contentWidth
+			leftPadding := totalPadding / 4  // Use 1/4 of padding on left
+			rightPadding := totalPadding - leftPadding  // Rest on right
+			
+			// Create justified line with distributed padding
+			result = append(result, strings.Repeat(" ", leftPadding)+content+strings.Repeat(" ", rightPadding-1)+"$")
 		} else {
-			// Content is too wide or empty, keep as is
+			// Content is too wide, keep as is
 			result = append(result, line)
 		}
 	}
