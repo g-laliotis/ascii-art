@@ -92,16 +92,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Generate ASCII art with color support
-	result := ascii.GenerateArtWithColor(text, charMap, substring, colorFlag)
+	// Generate ASCII art with color and alignment support
+	result := ascii.GenerateArtWithColorAndAlignment(text, charMap, substring, colorFlag, alignFlag)
 	if result != "" {
-		// Apply alignment if specified
-		if alignFlag != "" {
-			lines := strings.Split(result, "\n")
-			lines = ascii.ApplyAlignment(lines, alignFlag)
-			result = strings.Join(lines, "\n")
-		}
-		
 		// Save to file or print to stdout
 		if outputFile != "" {
 			if err := ascii.SaveToFile(outputFile, result+"\n"); err != nil {

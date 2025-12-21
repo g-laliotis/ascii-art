@@ -24,6 +24,31 @@ func GenerateArt(text string, charMap map[rune][]string) string {
 	return GenerateArtWithColor(text, charMap, "", "")
 }
 
+// GenerateArtWithColorAndAlignment converts input text to ASCII art with optional color and alignment support
+func GenerateArtWithColorAndAlignment(text string, charMap map[rune][]string, substring, color, alignment string) string {
+	if text == "" {
+		return ""
+	}
+
+	// Split text by newlines to handle multi-line input
+	lines := strings.Split(text, "\\n")
+	var result []string
+
+	for _, line := range lines {
+		if line == "" {
+			// Add empty line with $
+			result = append(result, "$")
+			continue
+		}
+
+		// Generate ASCII art for this line with wrapping, color, and alignment
+		artLines := generateLineArtWithWrapColorAndAlignment(line, charMap, substring, color, alignment)
+		result = append(result, artLines...)
+	}
+
+	return strings.Join(result, "\n")
+}
+
 // GenerateArtWithColor converts input text to ASCII art with optional color support
 func GenerateArtWithColor(text string, charMap map[rune][]string, substring, color string) string {
 	if text == "" {
@@ -98,9 +123,110 @@ func getTerminalWidth() int {
 	return 200
 }
 
-// generateLineArtWithWrap generates ASCII art for a line with terminal width wrapping
-func generateLineArtWithWrap(text string, charMap map[rune][]string) []string {
-	return generateLineArtWithWrapAndColor(text, charMap, "", "")
+// generateLineArtWithWrapColorAndAlignment generates ASCII art for a line with terminal width wrapping, color, and alignment support
+func generateLineArtWithWrapColorAndAlignment(text string, charMap map[rune][]string, substring, color, alignment string) []string {
+	termWidth := getTerminalWidth()
+	maxWidth := termWidth - 2
+	
+	if maxWidth < 10 {
+		lines := generateSegmentWithColor(text, charMap, []struct{ start, end int }{}, 0, color)
+		if alignment != "" {
+			lines = applyAlignmentToLines(lines, alignment, termWidth)
+		}
+		return lines
+	}
+
+	// Find all substring occurrences
+	var substringRanges []struct{ start, end int }
+	if substring != "" {
+		for i := 0; i <= len(text)-len(substring); i++ {
+			if text[i:i+len(substring)] == substring {
+				substringRanges = append(substringRanges, struct{ start, end int }{i, i + len(substring)})
+			}
+		}
+	}
+
+	// Calculate total width needed
+	totalWidth := 0
+	for _, char := range text {
+		if charLines, exists := charMap[char]; exists && len(charLines) > 0 {
+			totalWidth += len(charLines[0])
+		}
+	}
+
+	// If text fits on one line, no need to wrap
+	if totalWidth <= maxWidth {
+		lines := generateSegmentWithColor(text, charMap, substringRanges, 0, color)
+		if alignment != "" {
+			lines = applyAlignmentToLines(lines, alignment, termWidth)
+		}
+		return lines
+	}
+
+	// Calculate optimal segments for even distribution
+	numLines := (totalWidth + maxWidth - 1) / maxWidth // Ceiling division
+	targetWidth := totalWidth / numLines
+
+	// Generate segments with more even distribution
+	var segments [][]string
+	currentText := ""
+	currentWidth := 0
+	textOffset := 0
+	
+	for _, char := range text {
+		charLines, exists := charMap[char]
+		if !exists {
+			continue
+		}
+		
+		charWidth := 0
+		if len(charLines) > 0 {
+			charWidth = len(charLines[0])
+		}
+		
+		// Use target width for more even distribution
+		if currentWidth+charWidth > targetWidth && currentText != "" && len(segments) < numLines-1 {
+			currentArt := generateSegmentWithColor(currentText, charMap, substringRanges, textOffset, color)
+			segments = append(segments, currentArt)
+			
+			textOffset += len(currentText)
+			currentText = string(char)
+			currentWidth = charWidth
+		} else {
+			currentText += string(char)
+			currentWidth += charWidth
+		}
+	}
+	
+	if currentText != "" {
+		currentArt := generateSegmentWithColor(currentText, charMap, substringRanges, textOffset, color)
+		segments = append(segments, currentArt)
+	}
+
+	// Apply alignment to all segments uniformly
+	var allLines []string
+	for _, segment := range segments {
+		if alignment != "" {
+			segment = applyAlignmentToLines(segment, alignment, termWidth)
+		}
+		allLines = append(allLines, segment...)
+	}
+	
+	return allLines
+}
+
+// applyAlignmentToLines applies alignment to a set of lines
+func applyAlignmentToLines(lines []string, alignment string, termWidth int) []string {
+	switch alignment {
+	case "right":
+		return alignRightConsistent(lines, termWidth)
+	case "center":
+		return alignCenterConsistent(lines, termWidth)
+	case "justify":
+		return alignJustifyConsistent(lines, termWidth)
+	default:
+		return lines
+	}
 }
 
 // generateLineArtWithWrapAndColor generates ASCII art for a line with terminal width wrapping and color support
@@ -258,11 +384,11 @@ func ApplyAlignment(artLines []string, alignment string) []string {
 	// Apply the specified alignment
 	switch alignment {
 	case "right":
-		return alignRight(artLines, termWidth)
+		return alignRightConsistent(artLines, termWidth)
 	case "center":
-		return alignCenter(artLines, termWidth)
+		return alignCenterConsistent(artLines, termWidth)
 	case "justify":
-		return alignJustify(artLines, termWidth)
+		return alignJustifyConsistent(artLines, termWidth)
 	default:
 		return artLines
 	}
@@ -278,93 +404,100 @@ func isPositionInRanges(pos int, ranges []struct{ start, end int }) bool {
 	return false
 }
 
-// alignRight aligns ASCII art lines to the right side of the terminal
-func alignRight(artLines []string, termWidth int) []string {
+// alignRightConsistent aligns all ASCII art lines consistently to the right
+func alignRightConsistent(artLines []string, termWidth int) []string {
 	var result []string
 	
 	for _, line := range artLines {
 		if line == "" || line == "$" {
-			// Empty lines remain empty
 			result = append(result, line)
 			continue
 		}
 		
 		// Remove the trailing $ to get actual content
 		content := strings.TrimSuffix(line, "$")
-		contentWidth := len(content)
 		
-		// Calculate padding needed for right alignment
-		if contentWidth < termWidth {
-			padding := termWidth - contentWidth
-			// Add padding to the left, then content, then $
-			result = append(result, strings.Repeat(" ", padding)+content+"$")
-		} else {
-			// Content is too wide, keep as is
-			result = append(result, line)
+		// Calculate visual length (excluding ANSI color codes)
+		visualLen := getVisualLength(content)
+		
+		// Calculate padding for right alignment
+		padding := termWidth - visualLen - 1 // -1 for the $ at the end
+		if padding < 0 {
+			padding = 0
 		}
+		
+		result = append(result, strings.Repeat(" ", padding)+content+"$")
 	}
 	
 	return result
 }
 
-// alignCenter centers ASCII art lines in the terminal
-func alignCenter(artLines []string, termWidth int) []string {
+// getVisualLength returns the visual length of a string, excluding ANSI color codes
+func getVisualLength(s string) int {
+	visualLen := 0
+	inEscape := false
+	
+	for i := 0; i < len(s); i++ {
+		if s[i] == '\033' && i+1 < len(s) && s[i+1] == '[' {
+			inEscape = true
+			i++ // skip the '['
+		} else if inEscape && s[i] == 'm' {
+			inEscape = false
+		} else if !inEscape {
+			visualLen++
+		}
+	}
+	
+	return visualLen
+}
+
+// alignCenterConsistent centers all ASCII art lines consistently
+func alignCenterConsistent(artLines []string, termWidth int) []string {
 	var result []string
 	
 	for _, line := range artLines {
 		if line == "" || line == "$" {
-			// Empty lines remain empty
 			result = append(result, line)
 			continue
 		}
 		
 		// Remove the trailing $ to get actual content
 		content := strings.TrimSuffix(line, "$")
-		contentWidth := len(content)
 		
-		// Calculate padding needed for center alignment
-		if contentWidth < termWidth {
-			totalPadding := termWidth - contentWidth
-			leftPadding := totalPadding / 2
-			// Add left padding, content, then $
-			result = append(result, strings.Repeat(" ", leftPadding)+content+"$")
-		} else {
-			// Content is too wide, keep as is
-			result = append(result, line)
+		// Calculate padding for center alignment
+		padding := 0
+		if len(content) < termWidth {
+			totalPadding := termWidth - len(content)
+			padding = totalPadding / 2
 		}
+		
+		result = append(result, strings.Repeat(" ", padding)+content+"$")
 	}
 	
 	return result
 }
 
-// alignJustify distributes ASCII art content evenly across the terminal width
-func alignJustify(artLines []string, termWidth int) []string {
+// alignJustifyConsistent distributes all ASCII art lines consistently
+func alignJustifyConsistent(artLines []string, termWidth int) []string {
 	var result []string
 	
 	for _, line := range artLines {
 		if line == "" || line == "$" {
-			// Empty lines remain empty
 			result = append(result, line)
 			continue
 		}
 		
 		// Remove the trailing $ to get actual content
 		content := strings.TrimSuffix(line, "$")
-		contentWidth := len(content)
 		
-		// For ASCII art, justify means spreading the content across the terminal
-		// If content is much smaller than terminal, add padding to both sides
-		if contentWidth < termWidth {
-			totalPadding := termWidth - contentWidth
-			leftPadding := totalPadding / 4  // Use 1/4 of padding on left
-			rightPadding := totalPadding - leftPadding  // Rest on right
-			
-			// Create justified line with distributed padding
-			result = append(result, strings.Repeat(" ", leftPadding)+content+strings.Repeat(" ", rightPadding-1)+"$")
-		} else {
-			// Content is too wide, keep as is
-			result = append(result, line)
+		// Calculate padding for justify alignment (left-biased)
+		padding := 0
+		if len(content) < termWidth {
+			totalPadding := termWidth - len(content)
+			padding = totalPadding / 4  // Use 1/4 of padding on left
 		}
+		
+		result = append(result, strings.Repeat(" ", padding)+content+"$")
 	}
 	
 	return result
