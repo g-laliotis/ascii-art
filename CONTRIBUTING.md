@@ -40,8 +40,9 @@ make run-thinkertoy
 # Test file output
 make run-output
 
-# Test all features
-make run-all-features
+# Test alignment features
+make run-align
+make run-align-color
 
 # Format code
 make fmt
@@ -58,6 +59,14 @@ To add new banner styles:
 3. Include all ASCII printable characters (32-126)
 4. Add tests in `internal/ascii/art_banner_test.go`
 5. Update documentation
+
+### Adding New Alignment Types
+
+1. Add alignment logic to `internal/ascii/art.go`
+2. Update `isValidAlignment` function in `cmd/ascii-art/main.go`
+3. Add tests in `internal/ascii/alignment_test.go`
+4. Consider ANSI color code handling in visual length calculation
+5. Update documentation and examples
 
 ### Adding New Color Support
 

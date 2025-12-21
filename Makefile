@@ -1,6 +1,6 @@
 # ASCII-Art Makefile
 
-.PHONY: build test clean install run run-shadow run-thinkertoy run-color run-output help
+.PHONY: build test clean install run run-shadow run-thinkertoy run-color run-output run-align help
 
 # Default target
 all: build
@@ -42,9 +42,15 @@ run-output:
 	go run ./cmd/ascii-art --output=example.txt "Hello World"
 	@echo "Output saved to example.txt"
 
+run-align:
+	go run ./cmd/ascii-art --align=right "Hello World"
+
+run-align-color:
+	go run ./cmd/ascii-art --align=center --color=green "Hello World"
+
 run-all-features:
-	go run ./cmd/ascii-art --color=blue --output=demo.txt "Demo" thinkertoy
-	@echo "Colored thinkertoy output saved to demo.txt"
+	go run ./cmd/ascii-art --align=right --color=blue --output=demo.txt "Demo" thinkertoy
+	@echo "Right-aligned colored thinkertoy output saved to demo.txt"
 
 # Format code
 fmt:
@@ -67,7 +73,9 @@ help:
 	@echo "  run-thinkertoy   - Run with thinkertoy banner"
 	@echo "  run-color        - Run with color example"
 	@echo "  run-output       - Run with file output example"
-	@echo "  run-all-features - Run with all features combined"
+	@echo "  run-align        - Run with alignment example"
+	@echo "  run-align-color  - Run with alignment and color example"
+	@echo "  run-all-features - Run with all features combined (alignment, color, output)"
 	@echo "  fmt              - Format code"
 	@echo "  lint             - Lint code (requires golangci-lint)"
 	@echo "  help             - Show this help"

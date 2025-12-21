@@ -15,6 +15,7 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 
 - 🎨 **Multiple banner styles** - `standard`, `shadow`, and `thinkertoy` ASCII art fonts
 - 🌈 **Color support** - colorize entire output or specific substrings with ANSI colors
+- 📐 **Text alignment** - align output with `left`, `right`, `center`, or `justify` options
 - 💾 **File output** - save ASCII art to files with `--output=filename`
 - 📝 Support for letters, numbers, spaces, and special characters
 - 🔄 Multi-line output with `\n` support
@@ -98,6 +99,12 @@ go run ./cmd/ascii-art "Hello\nWorld"
 # Special characters and numbers
 go run ./cmd/ascii-art "Hello There! 123"
 
+# Text alignment
+go run ./cmd/ascii-art --align=left "Hello"
+go run ./cmd/ascii-art --align=right "Hello" shadow
+go run ./cmd/ascii-art --align=center "Hello" thinkertoy
+go run ./cmd/ascii-art --align=justify "Hello"
+
 # Color entire output
 go run ./cmd/ascii-art --color=red "Hello"
 go run ./cmd/ascii-art --color=blue "Hello" shadow
@@ -111,24 +118,26 @@ go run ./cmd/ascii-art --output=result.txt "Hello"
 go run ./cmd/ascii-art --output=art.txt "Hello" shadow
 
 # Combine all features
-go run ./cmd/ascii-art --color=red --output=colored.txt "Hello" thinkertoy
+go run ./cmd/ascii-art --align=right --color=red --output=colored.txt "Hello" thinkertoy
 
 # Available colors: red, green, yellow, blue, magenta, cyan, white, orange
+# Available alignments: left, right, center, justify
 
 # Empty string (prints nothing)
 go run ./cmd/ascii-art ""
 
-# Long text (automatically wraps to terminal width)
-go run ./cmd/ascii-art "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# Long text (automatically wraps to terminal width with consistent alignment)
+go run ./cmd/ascii-art --align=right "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ```
 
 ### 📱 Terminal Width Adaptation
 
 The program automatically detects your terminal width and wraps long text accordingly:
 
-- **Smart wrapping**: Automatically breaks long text at character boundaries
+- **Smart wrapping**: Automatically breaks long text at character boundaries with even distribution
 - **Any terminal size**: Works on narrow mobile terminals to wide desktop screens
 - **Preserves formatting**: Each wrapped section maintains proper ASCII art structure
+- **Consistent alignment**: All wrapped lines maintain the same alignment (left, right, center, justify)
 - **Color preservation**: Substring coloring works correctly across wrapped lines
 - **Fallback support**: Uses COLUMNS environment variable or defaults to 200 characters
 
@@ -136,10 +145,10 @@ The program automatically detects your terminal width and wraps long text accord
 
 ```
 ascii-art/
-├── cmd/ascii-art/main.go          # Entry point with enhanced argument parsing
+├── cmd/ascii-art/main.go          # Entry point with argument parsing and alignment support
 ├── internal/
 │   ├── ascii/                     # Core ASCII generation logic
-│   │   ├── art.go                # ASCII art generation with terminal width detection
+│   │   ├── art.go                # ASCII art generation with alignment and wrapping
 │   │   ├── banner.go             # Banner file loading and parsing
 │   │   ├── color.go              # Enhanced color support with ANSI codes
 │   │   ├── output.go             # File output functionality
@@ -147,6 +156,7 @@ ascii-art/
 │   │   ├── terminal_windows.go   # Windows terminal width detection
 │   │   ├── art_test.go          # Unit tests for art generation
 │   │   ├── art_banner_test.go   # Tests for different banner styles
+│   │   ├── alignment_test.go    # Tests for alignment functionality
 │   │   ├── banner_test.go       # Enhanced banner loading tests
 │   │   ├── color_test.go        # Unit tests for color functionality
 │   │   └── output_test.go       # Tests for file output

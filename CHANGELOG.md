@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Text alignment support**: New `--align=<type>` flag with `left`, `right`, `center`, and `justify` options
+- **Smart text distribution**: Even distribution of text across wrapped lines for better visual balance
+- **ANSI color code handling**: Proper alignment calculation that excludes color codes from visual length
+- **Consistent wrapped alignment**: All wrapped segments maintain the same alignment type
+- **Enhanced wrapping algorithm**: Improved text wrapping that considers target width for even distribution
+
+### Changed
+- **Wrapping logic**: Changed from maximum-fill to even-distribution algorithm for better visual balance
+- **Alignment calculation**: Enhanced to handle ANSI color codes correctly
+- **Command-line interface**: Added alignment flag support with validation
+
+### Fixed
+- **Wrapped line alignment**: Fixed issue where first wrapped line appeared left-aligned while subsequent lines were properly aligned
+- **Color alignment interaction**: Fixed alignment calculation when using colored text
+- **Visual length calculation**: Proper handling of ANSI escape sequences in alignment padding
+
 ## [1.2.0] - 2024-12-20
 
 ### Added
