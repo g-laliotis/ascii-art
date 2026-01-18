@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2024-12-21
+
+### Added
+- **Text alignment support**: New `--align=<type>` flag with `left`, `right`, `center`, and `justify` options
+- **Smart text distribution**: Even distribution of text across wrapped lines for better visual balance
+- **ANSI color code handling**: Proper alignment calculation that excludes color codes from visual length
+- **Consistent wrapped alignment**: All wrapped segments maintain the same alignment type
+- **Enhanced wrapping algorithm**: Improved text wrapping that considers target width for even distribution
+
+### Changed
+- **Wrapping logic**: Changed from maximum-fill to even-distribution algorithm for better visual balance
+- **Alignment calculation**: Enhanced to handle ANSI color codes correctly
+- **Command-line interface**: Added alignment flag support with validation
+
+### Fixed
+- **Wrapped line alignment**: Fixed issue where first wrapped line appeared left-aligned while subsequent lines were properly aligned
+- **Color alignment interaction**: Fixed alignment calculation when using colored text
+- **Visual length calculation**: Proper handling of ANSI escape sequences in alignment padding
+
 ## [1.2.0] - 2024-12-20
 
 ### Added
@@ -89,6 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Professional badges (CI, license, Go report card, Makefile)
 - Comprehensive usage examples and troubleshooting guide
 
+[1.3.0]: https://github.com/g-laliotis/ascii-art/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/g-laliotis/ascii-art/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/g-laliotis/ascii-art/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/g-laliotis/ascii-art/releases/tag/v1.0.0
