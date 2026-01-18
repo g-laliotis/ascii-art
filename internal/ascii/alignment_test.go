@@ -92,13 +92,13 @@ func TestAlignRight(t *testing.T) {
 			name:      "Simple right alignment",
 			lines:     []string{"hello$", "world$"},
 			termWidth: 20,
-			want:      []string{"               hello$", "               world$"},
+			want:      []string{"              hello$", "              world$"},
 		},
 		{
 			name:      "Empty line handling",
 			lines:     []string{"hello$", "$", "world$"},
 			termWidth: 20,
-			want:      []string{"               hello$", "$", "               world$"},
+			want:      []string{"              hello$", "$", "              world$"},
 		},
 		{
 			name:      "Content too wide",
@@ -110,7 +110,7 @@ func TestAlignRight(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := alignRight(tt.lines, tt.termWidth)
+			result := alignRightConsistent(tt.lines, tt.termWidth)
 			
 			if len(result) != len(tt.want) {
 				t.Errorf("alignRight() returned %d lines, want %d", len(result), len(tt.want))
@@ -143,7 +143,7 @@ func TestAlignCenter(t *testing.T) {
 			name:      "Even width centering",
 			lines:     []string{"test$"},
 			termWidth: 10,
-			want:      []string{"   test$"},
+			want:      []string{"  test$"},
 		},
 		{
 			name:      "Odd width centering",
@@ -161,7 +161,7 @@ func TestAlignCenter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := alignCenter(tt.lines, tt.termWidth)
+			result := alignCenterConsistent(tt.lines, tt.termWidth)
 			
 			if len(result) != len(tt.want) {
 				t.Errorf("alignCenter() returned %d lines, want %d", len(result), len(tt.want))
@@ -202,7 +202,7 @@ func TestAlignJustify(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := alignJustify(tt.lines, tt.termWidth)
+			result := alignJustifyConsistent(tt.lines, tt.termWidth)
 			
 			// Check that we get the same number of lines
 			if len(result) != len(tt.lines) {
