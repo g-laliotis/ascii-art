@@ -464,10 +464,13 @@ func alignCenterConsistent(artLines []string, termWidth int) []string {
 		// Remove the trailing $ to get actual content
 		content := strings.TrimSuffix(line, "$")
 		
+		// Calculate visual length (excluding ANSI color codes)
+		visualLen := getVisualLength(content)
+		
 		// Calculate padding for center alignment
 		padding := 0
-		if len(content) < termWidth {
-			totalPadding := termWidth - len(content)
+		if visualLen < termWidth {
+			totalPadding := termWidth - visualLen - 1 // -1 for the $ at the end
 			padding = totalPadding / 2
 		}
 		
@@ -490,10 +493,13 @@ func alignJustifyConsistent(artLines []string, termWidth int) []string {
 		// Remove the trailing $ to get actual content
 		content := strings.TrimSuffix(line, "$")
 		
+		// Calculate visual length (excluding ANSI color codes)
+		visualLen := getVisualLength(content)
+		
 		// Calculate padding for justify alignment (left-biased)
 		padding := 0
-		if len(content) < termWidth {
-			totalPadding := termWidth - len(content)
+		if visualLen < termWidth {
+			totalPadding := termWidth - visualLen - 1 // -1 for the $ at the end
 			padding = totalPadding / 4  // Use 1/4 of padding on left
 		}
 		
