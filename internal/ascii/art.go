@@ -41,12 +41,82 @@ func GenerateArtWithColorAndAlignment(text string, charMap map[rune][]string, su
 			continue
 		}
 
-		// Generate ASCII art for this line with wrapping, color, and alignment
-		artLines := generateLineArtWithWrapColorAndAlignment(line, charMap, substring, color, alignment)
-		result = append(result, artLines...)
+		// For justify alignment with multiple words, handle specially
+		if alignment == "justify" && len(strings.Fields(line)) > 1 {
+			artLines := generateJustifiedArt(line, charMap, substring, color)
+			result = append(result, artLines...)
+		} else {
+			// Generate ASCII art for this line with wrapping, color, and alignment
+			artLines := generateLineArtWithWrapColorAndAlignment(line, charMap, substring, color, alignment)
+			result = append(result, artLines...)
+		}
 	}
 
 	return strings.Join(result, "\n")
+}
+
+// generateJustifiedArt generates justified ASCII art by distributing words across terminal width
+func generateJustifiedArt(text string, charMap map[rune][]string, substring, color string) []string {
+	words := strings.Fields(text)
+	if len(words) <= 1 {
+		// Single word, use left alignment
+		return generateSegmentWithColor(text, charMap, []struct{ start, end int }{}, 0, color)
+	}
+
+	termWidth := getTerminalWidth()
+	
+	// Generate ASCII art for each word
+	var wordArts [][][]string // [word][line][8 lines]
+	var wordWidths []int
+	totalWordWidth := 0
+	
+	for _, word := range words {
+		wordArt := generateSegmentWithColor(word, charMap, []struct{ start, end int }{}, 0, "")
+		wordArts = append(wordArts, [][]string{wordArt})
+		
+		// Calculate word width (from first line, excluding $)
+		if len(wordArt) > 0 {
+			wordWidth := len(strings.TrimSuffix(wordArt[0], "$"))
+			wordWidths = append(wordWidths, wordWidth)
+			totalWordWidth += wordWidth
+		}
+	}
+	
+	// Calculate spacing between words
+	totalSpacing := termWidth - totalWordWidth - 1 // -1 for final $
+	if totalSpacing < 0 {
+		totalSpacing = 0
+	}
+	
+	gaps := len(words) - 1
+	if gaps <= 0 {
+		gaps = 1
+	}
+	spacePerGap := totalSpacing / gaps
+	extraSpaces := totalSpacing % gaps
+	
+	// Build justified lines
+	result := make([]string, 8)
+	for lineIdx := 0; lineIdx < 8; lineIdx++ {
+		for wordIdx, wordArt := range wordArts {
+			if len(wordArt) > 0 && len(wordArt[0]) > lineIdx {
+				content := strings.TrimSuffix(wordArt[0][lineIdx], "$")
+				result[lineIdx] += content
+				
+				// Add spacing after word (except last word)
+				if wordIdx < len(words)-1 {
+					spaces := spacePerGap
+					if wordIdx < extraSpaces {
+						spaces++
+					}
+					result[lineIdx] += strings.Repeat(" ", spaces)
+				}
+			}
+		}
+		result[lineIdx] += "$"
+	}
+	
+	return result
 }
 
 // GenerateArtWithColor converts input text to ASCII art with optional color support
@@ -131,7 +201,7 @@ func generateLineArtWithWrapColorAndAlignment(text string, charMap map[rune][]st
 	if maxWidth < 10 {
 		lines := generateSegmentWithColor(text, charMap, []struct{ start, end int }{}, 0, color)
 		if alignment != "" {
-			lines = applyAlignmentToLines(lines, alignment, termWidth)
+			lines = applyAlignmentToLinesWithText(lines, alignment, termWidth, text)
 		}
 		return lines
 	}
@@ -158,7 +228,7 @@ func generateLineArtWithWrapColorAndAlignment(text string, charMap map[rune][]st
 	if totalWidth <= maxWidth {
 		lines := generateSegmentWithColor(text, charMap, substringRanges, 0, color)
 		if alignment != "" {
-			lines = applyAlignmentToLines(lines, alignment, termWidth)
+			lines = applyAlignmentToLinesWithText(lines, alignment, termWidth, text)
 		}
 		return lines
 	}
@@ -207,7 +277,7 @@ func generateLineArtWithWrapColorAndAlignment(text string, charMap map[rune][]st
 	var allLines []string
 	for _, segment := range segments {
 		if alignment != "" {
-			segment = applyAlignmentToLines(segment, alignment, termWidth)
+			segment = applyAlignmentToLinesWithText(segment, alignment, termWidth, text)
 		}
 		allLines = append(allLines, segment...)
 	}
@@ -215,18 +285,23 @@ func generateLineArtWithWrapColorAndAlignment(text string, charMap map[rune][]st
 	return allLines
 }
 
-// applyAlignmentToLines applies alignment to a set of lines
-func applyAlignmentToLines(lines []string, alignment string, termWidth int) []string {
+// applyAlignmentToLinesWithText applies alignment to a set of lines with original text context
+func applyAlignmentToLinesWithText(lines []string, alignment string, termWidth int, originalText string) []string {
 	switch alignment {
 	case "right":
 		return alignRightConsistent(lines, termWidth)
 	case "center":
 		return alignCenterConsistent(lines, termWidth)
 	case "justify":
-		return alignJustifyConsistent(lines, termWidth)
+		return alignJustifyConsistent(lines, termWidth, originalText)
 	default:
 		return lines
 	}
+}
+
+// applyAlignmentToLines applies alignment to a set of lines
+func applyAlignmentToLines(lines []string, alignment string, termWidth int) []string {
+	return applyAlignmentToLinesWithText(lines, alignment, termWidth, "")
 }
 
 // generateLineArtWithWrapAndColor generates ASCII art for a line with terminal width wrapping and color support
@@ -388,7 +463,7 @@ func ApplyAlignment(artLines []string, alignment string) []string {
 	case "center":
 		return alignCenterConsistent(artLines, termWidth)
 	case "justify":
-		return alignJustifyConsistent(artLines, termWidth)
+		return alignJustifyConsistent(artLines, termWidth, "")
 	default:
 		return artLines
 	}
@@ -481,7 +556,17 @@ func alignCenterConsistent(artLines []string, termWidth int) []string {
 }
 
 // alignJustifyConsistent distributes all ASCII art lines consistently
-func alignJustifyConsistent(artLines []string, termWidth int) []string {
+// For single word: left-aligned. For multiple words: first word left, last word right
+func alignJustifyConsistent(artLines []string, termWidth int, originalText string) []string {
+	// Count words in original text
+	words := strings.Fields(originalText)
+	
+	// If single word or empty, use left alignment
+	if len(words) <= 1 {
+		return artLines // Left-aligned (default)
+	}
+	
+	// For multiple words, align to fill width (first word left, last word right)
 	var result []string
 	
 	for _, line := range artLines {
@@ -496,11 +581,10 @@ func alignJustifyConsistent(artLines []string, termWidth int) []string {
 		// Calculate visual length (excluding ANSI color codes)
 		visualLen := getVisualLength(content)
 		
-		// Calculate padding for justify alignment (left-biased)
-		padding := 0
-		if visualLen < termWidth {
-			totalPadding := termWidth - visualLen - 1 // -1 for the $ at the end
-			padding = totalPadding / 4  // Use 1/4 of padding on left
+		// Calculate padding for right alignment (to push to far right)
+		padding := termWidth - visualLen - 1 // -1 for the $ at the end
+		if padding < 0 {
+			padding = 0
 		}
 		
 		result = append(result, strings.Repeat(" ", padding)+content+"$")
