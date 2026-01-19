@@ -11,6 +11,7 @@ import (
 func main() {
 	var colorFlag, substring, text, outputFile, banner, alignFlag string
 	banner = "standard" // default banner
+	hasColorFlag := false
 
 	// Parse arguments - extract flags first
 	args := os.Args[1:]
@@ -19,6 +20,11 @@ func main() {
 		// Parse --output=filename flag
 		if strings.HasPrefix(arg, "--output=") {
 			outputFile = strings.TrimPrefix(arg, "--output=")
+			args = append(args[:i], args[i+1:]...)
+		// Parse --color=color flag
+		} else if strings.HasPrefix(arg, "--color=") {
+			colorFlag = strings.TrimPrefix(arg, "--color=")
+			hasColorFlag = true
 			args = append(args[:i], args[i+1:]...)
 		// Parse --align=type flag
 		} else if strings.HasPrefix(arg, "--align=") {
@@ -37,10 +43,10 @@ func main() {
 		// "text" -> use default standard banner
 		text = args[0]
 	case 2:
-		if strings.HasPrefix(args[0], "--color=") {
-			// "--color=red text" -> color entire text
-			colorFlag = strings.TrimPrefix(args[0], "--color=")
-			text = args[1]
+		if hasColorFlag {
+			// "--color=red text banner" -> color entire text with banner
+			text = args[0]
+			banner = args[1]
 		} else if strings.Contains(args[0], "=") && !strings.HasPrefix(args[0], "--") {
 			// Invalid flag format (e.g., "color=red")
 			printUsage()
@@ -51,24 +57,13 @@ func main() {
 			banner = args[1]
 		}
 	case 3:
-		if strings.HasPrefix(args[0], "--color=") {
-			// "--color=red substring text" -> color specific substring
-			colorFlag = strings.TrimPrefix(args[0], "--color=")
-			substring = args[1]
-			text = args[2]
+		if hasColorFlag {
+			// "--color=red substring text banner" -> color specific substring with banner
+			substring = args[0]
+			text = args[1]
+			banner = args[2]
 		} else {
 			// 3 args without color flag is invalid
-			printUsage()
-			return
-		}
-	case 4:
-		if strings.HasPrefix(args[0], "--color=") {
-			// "--color=red substring text banner" -> color substring with specific banner
-			colorFlag = strings.TrimPrefix(args[0], "--color=")
-			substring = args[1]
-			text = args[2]
-			banner = args[3]
-		} else {
 			printUsage()
 			return
 		}
@@ -76,6 +71,7 @@ func main() {
 		// Too many or no arguments
 		if len(args) > 0 {
 			printUsage()
+			return
 		}
 		return
 	}
