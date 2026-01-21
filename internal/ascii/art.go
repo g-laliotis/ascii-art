@@ -64,56 +64,101 @@ func generateJustifiedArt(text string, charMap map[rune][]string, substring, col
 	}
 
 	termWidth := getTerminalWidth()
+	maxWidth := termWidth - 1 // Reserve space for $
 	
-	// Generate ASCII art for each word
-	var wordArts [][][]string // [word][line][8 lines]
+	// Generate ASCII art for each word and calculate widths
+	var wordArts [][]string
 	var wordWidths []int
-	totalWordWidth := 0
 	
 	for _, word := range words {
 		wordArt := generateSegmentWithColor(word, charMap, []struct{ start, end int }{}, 0, "")
-		wordArts = append(wordArts, [][]string{wordArt})
+		wordArts = append(wordArts, wordArt)
 		
 		// Calculate word width (from first line, excluding $)
 		if len(wordArt) > 0 {
 			wordWidth := len(strings.TrimSuffix(wordArt[0], "$"))
 			wordWidths = append(wordWidths, wordWidth)
-			totalWordWidth += wordWidth
 		}
 	}
 	
-	// Calculate spacing between words
-	totalSpacing := termWidth - totalWordWidth - 1 // -1 for final $
-	if totalSpacing < 0 {
-		totalSpacing = 0
+	// Group words into lines that fit within terminal width
+	var lines [][]int // Each element contains word indices for that line
+	currentLine := []int{}
+	currentWidth := 0
+	
+	for i, width := range wordWidths {
+		// Check if adding this word would exceed terminal width
+		// Account for minimum 1 space between words
+		requiredWidth := width
+		if len(currentLine) > 0 {
+			requiredWidth += 1 // Space before word
+		}
+		
+		if currentWidth+requiredWidth > maxWidth && len(currentLine) > 0 {
+			// Start new line
+			lines = append(lines, currentLine)
+			currentLine = []int{i}
+			currentWidth = width
+		} else {
+			// Add to current line
+			currentLine = append(currentLine, i)
+			currentWidth += requiredWidth
+		}
 	}
 	
-	gaps := len(words) - 1
-	if gaps <= 0 {
-		gaps = 1
+	if len(currentLine) > 0 {
+		lines = append(lines, currentLine)
 	}
-	spacePerGap := totalSpacing / gaps
-	extraSpaces := totalSpacing % gaps
 	
-	// Build justified lines
-	result := make([]string, 8)
-	for lineIdx := 0; lineIdx < 8; lineIdx++ {
-		for wordIdx, wordArt := range wordArts {
-			if len(wordArt) > 0 && len(wordArt[0]) > lineIdx {
-				content := strings.TrimSuffix(wordArt[0][lineIdx], "$")
-				result[lineIdx] += content
-				
-				// Add spacing after word (except last word)
-				if wordIdx < len(words)-1 {
-					spaces := spacePerGap
-					if wordIdx < extraSpaces {
-						spaces++
-					}
-					result[lineIdx] += strings.Repeat(" ", spaces)
-				}
+	// Generate justified output for each line
+	var result []string
+	
+	for _, lineWords := range lines {
+		if len(lineWords) == 1 {
+			// Single word - left align
+			wordArt := wordArts[lineWords[0]]
+			result = append(result, wordArt...)
+		} else {
+			// Multiple words - justify
+			totalWordWidth := 0
+			for _, wordIdx := range lineWords {
+				totalWordWidth += wordWidths[wordIdx]
 			}
+			
+			// Calculate spacing
+			totalSpacing := maxWidth - totalWordWidth
+			gaps := len(lineWords) - 1
+			spacePerGap := 1 // Minimum 1 space
+			extraSpaces := 0
+			
+			if gaps > 0 && totalSpacing > gaps {
+				spacePerGap = totalSpacing / gaps
+				extraSpaces = totalSpacing % gaps
+			}
+			
+			// Build justified lines
+			lineResult := make([]string, 8)
+			for lineIdx := 0; lineIdx < 8; lineIdx++ {
+				for i, wordIdx := range lineWords {
+					wordArt := wordArts[wordIdx]
+					if lineIdx < len(wordArt) {
+						content := strings.TrimSuffix(wordArt[lineIdx], "$")
+						lineResult[lineIdx] += content
+						
+						// Add spacing after word (except last word)
+						if i < len(lineWords)-1 {
+							spaces := spacePerGap
+							if i < extraSpaces {
+								spaces++
+							}
+							lineResult[lineIdx] += strings.Repeat(" ", spaces)
+						}
+					}
+				}
+				lineResult[lineIdx] += "$"
+			}
+			result = append(result, lineResult...)
 		}
-		result[lineIdx] += "$"
 	}
 	
 	return result
