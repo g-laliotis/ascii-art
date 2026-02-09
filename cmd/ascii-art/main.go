@@ -47,10 +47,6 @@ func main() {
 			// "--color=red text banner" -> color entire text with banner
 			text = args[0]
 			banner = args[1]
-		} else if strings.Contains(args[0], "=") && !strings.HasPrefix(args[0], "--") {
-			// Invalid flag format (e.g., "color=red")
-			printUsage()
-			return
 		} else {
 			// "text banner" -> use specified banner
 			text = args[0]

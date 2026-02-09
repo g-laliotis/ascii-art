@@ -13,6 +13,7 @@ func TestAsciiArtHandler_Success(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -27,6 +28,7 @@ func TestAsciiArtHandler_DefaultBanner(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -41,6 +43,7 @@ func TestAsciiArtHandler_WithColor(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -55,6 +58,7 @@ func TestAsciiArtHandler_WithSubstring(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -71,6 +75,7 @@ func TestAsciiArtHandler_WithAlignment(t *testing.T) {
 		body, _ := json.Marshal(req)
 		
 		r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+		r.Header.Set("Content-Type", "application/json")
 		w := httptest.NewRecorder()
 		
 		asciiArtHandler(w, r)
@@ -94,6 +99,7 @@ func TestAsciiArtHandler_MethodNotAllowed(t *testing.T) {
 
 func TestAsciiArtHandler_InvalidJSON(t *testing.T) {
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader([]byte("invalid")))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -108,6 +114,7 @@ func TestAsciiArtHandler_EmptyText(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -122,6 +129,7 @@ func TestAsciiArtHandler_InvalidAlignment(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)
@@ -136,6 +144,7 @@ func TestAsciiArtHandler_BannerNotFound(t *testing.T) {
 	body, _ := json.Marshal(req)
 	
 	r := httptest.NewRequest(http.MethodPost, "/ascii-art", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	
 	asciiArtHandler(w, r)

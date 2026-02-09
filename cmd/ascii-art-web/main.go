@@ -80,11 +80,16 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bannerFile := "assets/" + req.Banner + ".txt"
+	bannerFile := "../../assets/" + req.Banner + ".txt"
 	charMap, err := ascii.LoadBanner(bannerFile)
 	if err != nil {
-		sendError(w, "Banner not found", http.StatusNotFound)
-		return
+		// Try from project root (when running server)
+		bannerFile = "assets/" + req.Banner + ".txt"
+		charMap, err = ascii.LoadBanner(bannerFile)
+		if err != nil {
+			sendError(w, "Banner not found", http.StatusNotFound)
+			return
+		}
 	}
 
 	result := ascii.GenerateArtWithColorAndAlignment(req.Text, charMap, req.Substring, req.Color, req.Align)
