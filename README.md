@@ -9,7 +9,7 @@
 
 ASCII-Art is a command-line tool that converts regular text into stylized ASCII art using predefined banner templates. Perfect for creating eye-catching headers, banners, or just having fun with text!
 
-🌐 **[Try the Live Demo](https://g-laliotis.github.io/ascii-art/)**
+🌐 **[Try the Live Demo](https://g-laliotis.github.io/ascii-art/)** | 🖥️ **[Try the Server Demo](http://localhost:8080/server.html)**
 
 ## ✨ Features
 
@@ -17,6 +17,7 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 - 🌈 **Color support** - colorize entire output or specific substrings with ANSI colors
 - 📐 **Text alignment** - align output with `left`, `right`, `center`, or `justify` options
 - 💾 **File output** - save ASCII art to files with `--output=filename`
+- 🌐 **HTTP Server** - REST API with JSON endpoints and web interface
 - 📝 Support for letters, numbers, spaces, and special characters
 - 🔄 Multi-line output with `\n` support
 - 📱 **Cross-platform terminal width detection** - adapts to any screen size (Unix/Windows)
@@ -24,6 +25,8 @@ ASCII-Art is a command-line tool that converts regular text into stylized ASCII 
 - 🎯 Simple and flexible command-line interface
 
 ## 🚀 Quick Start
+
+### CLI Tool
 
 ```bash
 # Clone the repository
@@ -35,6 +38,17 @@ go run ./cmd/ascii-art "Hello World"
 
 # Or use Makefile
 make run
+```
+
+### HTTP Server
+
+```bash
+# Start the server
+go run ./cmd/ascii-art-web
+
+# Server runs on http://localhost:8080
+# Web interface: http://localhost:8080/server.html
+# API endpoint: POST http://localhost:8080/ascii-art
 ```
 
 ## 📝 Example Output
@@ -84,6 +98,8 @@ go test -v ./...
 
 ## 📚 Usage
 
+### Command Line
+
 ```bash
 # Basic text (default: standard banner)
 go run ./cmd/ascii-art "Hello"
@@ -130,6 +146,44 @@ go run ./cmd/ascii-art ""
 go run ./cmd/ascii-art --align=right "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ```
 
+### HTTP Server API
+
+```bash
+# Start server
+go run ./cmd/ascii-art-web
+
+# Make API request
+curl -X POST http://localhost:8080/ascii-art \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Hello","banner":"standard","color":"red","align":"center"}'
+
+# Response
+{
+  "result": "...ASCII art output..."
+}
+
+# Error response (400/404/500)
+{
+  "error": "error message"
+}
+```
+
+**API Request Body:**
+- `text` (required): Text to convert
+- `banner` (optional): `standard`, `shadow`, or `thinkertoy` (default: `standard`)
+- `color` (optional): `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `orange`
+- `substring` (optional): Specific substring to colorize
+- `align` (optional): `left`, `right`, `center`, `justify`
+
+**HTTP Status Codes:**
+- `200 OK`: Success
+- `400 Bad Request`: Invalid input
+- `404 Not Found`: Banner not found
+- `500 Internal Server Error`: Server error
+
+**Web Interface:**
+Open `http://localhost:8080/server.html` in your browser for an interactive demo.
+
 ### 📱 Terminal Width Adaptation
 
 The program automatically detects your terminal width and wraps long text accordingly:
@@ -145,7 +199,11 @@ The program automatically detects your terminal width and wraps long text accord
 
 ```
 ascii-art/
-├── cmd/ascii-art/main.go          # Entry point with argument parsing and alignment support
+├── cmd/
+│   ├── ascii-art/main.go          # CLI entry point
+│   └── ascii-art-web/             # HTTP server
+│       ├── main.go                # Server with REST API
+│       └── main_test.go           # Server tests (100% coverage)
 ├── internal/
 │   ├── ascii/                     # Core ASCII generation logic
 │   │   ├── art.go                # ASCII art generation with alignment and wrapping
@@ -167,7 +225,8 @@ ascii-art/
 │   ├── shadow.txt                # Shadow banner style
 │   └── thinkertoy.txt            # Thinkertoy banner style
 ├── docs/
-│   └── index.html               # GitHub Pages website with live demo
+│   ├── index.html               # GitHub Pages website with live demo
+│   └── server.html              # Web interface for HTTP server
 ├── .github/
 │   └── workflows/
 │       └── ci.yml               # GitHub Actions CI/CD pipeline
