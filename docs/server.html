@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII-Art | Text to ASCII Art Generator</title>
+    <meta name="description" content="Command-line ASCII art generator with banner templates written in Go">
+    <meta name="keywords" content="ascii, art, go, golang, cli, banner, text, generator">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117; color: #e6edf3; line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 3rem; color: #58a6ff; margin-bottom: 1rem; }
+        .header p { font-size: 1.2rem; color: #8b949e; }
+        .badges { display: flex; justify-content: center; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+        .badge { padding: 0.3rem 0.8rem; background: #21262d; border-radius: 6px; font-size: 0.9rem; }
+        .section { margin: 2rem 0; padding: 1.5rem; background: #161b22; border-radius: 8px; border: 1px solid #30363d; }
+        .section h2 { color: #f0f6fc; margin-bottom: 1rem; }
+        .btn { display: inline-block; padding: 0.8rem 1.5rem; background: #238636; color: white; text-decoration: none; border-radius: 6px; margin: 0.5rem 0.5rem 0.5rem 0; border: none; cursor: pointer; }
+        .btn:hover { background: #2ea043; }
+        .btn-secondary { background: #21262d; border: 1px solid #30363d; }
+        .btn-secondary:hover { background: #30363d; }
+        .demo-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+        .demo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        .demo-input input, .demo-input select { width: 100%; padding: 12px; border: 1px solid #30363d; border-radius: 6px; background: #0d1117; color: #f0f6fc; font-size: 1rem; margin-bottom: 0.5rem; }
+        .demo-output { background: #0d1117; color: #58a6ff; padding: 1rem; border-radius: 6px; font-family: 'SF Mono', Monaco, monospace; font-size: 0.8rem; overflow-x: auto; white-space: pre; border: 1px solid #30363d; min-height: 200px; }
+        .error { color: #f85149; }
+        @media (max-width: 768px) { .demo-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 ASCII-Art Server</h1>
+            <p>Transform text into beautiful ASCII art - Connected to Go Backend</p>
+            <div class="badges">
+                <span class="badge">Go Server</span>
+                <span class="badge">Live Backend</span>
+                <span class="badge">REST API</span>
+            </div>
+        </div>
+
+        <div id="demo" class="demo-section">
+            <h2>🎯 Live Demo</h2>
+            <div class="demo-container">
+                <div class="demo-input">
+                    <input type="text" id="textInput" placeholder="Enter text here..." value="Hello!">
+                    <select id="bannerSelect">
+                        <option value="standard">Standard</option>
+                        <option value="shadow">Shadow</option>
+                        <option value="thinkertoy">Thinkertoy</option>
+                    </select>
+                    <select id="colorSelect">
+                        <option value="">No Color</option>
+                        <option value="red">Red</option>
+                        <option value="green">Green</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="blue">Blue</option>
+                        <option value="magenta">Magenta</option>
+                        <option value="cyan">Cyan</option>
+                        <option value="white">White</option>
+                        <option value="orange">Orange</option>
+                    </select>
+                    <select id="alignSelect">
+                        <option value="">No Alignment</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                        <option value="center">Center</option>
+                        <option value="justify">Justify</option>
+                    </select>
+                    <input type="text" id="substringInput" placeholder="Substring to color (optional)">
+                    <button onclick="generateArt()" class="btn" style="width: 100%; margin-top: 1rem;">Generate ASCII Art</button>
+                </div>
+                <div class="demo-output" id="output">Click "Generate ASCII Art" to start...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function generateArt() {
+            const text = document.getElementById('textInput').value;
+            const banner = document.getElementById('bannerSelect').value;
+            const color = document.getElementById('colorSelect').value;
+            const align = document.getElementById('alignSelect').value;
+            const substring = document.getElementById('substringInput').value;
+            const output = document.getElementById('output');
+            
+            if (!text) {
+                output.textContent = 'Enter some text to generate ASCII art!';
+                output.className = 'demo-output error';
+                return;
+            }
+
+            output.textContent = 'Loading...';
+            output.className = 'demo-output';
+
+            try {
+                const response = await fetch('http://localhost:8080/ascii-art', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, banner, color, substring, align })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    output.textContent = data.result;
+                    if (color) {
+                        output.style.color = color;
+                    } else {
+                        output.style.color = '#58a6ff';
+                    }
+                } else {
+                    output.textContent = 'Error: ' + data.error;
+                    output.className = 'demo-output error';
+                }
+            } catch (error) {
+                output.textContent = 'Error: Could not connect to server. Make sure the Go server is running on port 8080.';
+                output.className = 'demo-output error';
+            }
+        }
+    </script>
+</body>
+</html>
